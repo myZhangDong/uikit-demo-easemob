@@ -6,15 +6,13 @@ function AuthCheck({ children }: { children: ReactElement<any, any> }) {
   //   const user = getUser();
   let navigate = useNavigate();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     // 检查用户是否已登录
     const checkAuthentication = () => {
-      // const isAuthenticated: boolean =
-      //   !!localStorage.getItem("isAuthenticated");
-      // setIsAuthenticated(isAuthenticated);
-
+      const isAuthenticated: boolean = !!sessionStorage.getItem("webImAuth");
+      setIsAuthenticated(isAuthenticated);
       if (!isAuthenticated) {
         navigate("/login"); //跳转到登陆页面
       }

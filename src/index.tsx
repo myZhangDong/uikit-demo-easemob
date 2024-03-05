@@ -14,17 +14,7 @@ import { Provider } from "easemob-chat-uikit";
 // );
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <div
-    className="container"
-    style={{
-      display: "flex",
-      position: "absolute",
-      width: "90%",
-      height: "90%",
-      left: "5%",
-      top: "3%",
-    }}
-  >
+  <div>
     <Provider
       initConfig={{
         appKey: "easemob#easeim",

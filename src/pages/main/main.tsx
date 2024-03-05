@@ -28,60 +28,37 @@ import {
   Thread,
 } from "easemob-chat-uikit";
 import "easemob-chat-uikit/style.css";
-// import "./App.css";
+import "./main.scss";
 
 // @ts-ignore
 window.rootStore = rootStore;
 const ChatApp: FC<any> = () => {
   const client = useClient();
-  // useEffect(() => {
-  //   client &&
-  //     client
-  //       .open({
-  //         user: 'zd3',
-  //         // pwd: '272808',
-  //         accessToken:
-  //           'YWMtgwTHNZPxQviWaqMIJTHfFyhYwv00w0hrtpGKy_Jc3V2J3LcwYk0R7J9BM4gepb6yAwMAAAGLCXYIsQABTnFcluGlL4BdlKN4Qdf0EQThNgjgWh4vB9JhWxj-X18Ucg==',
-  //       })
-  //       .then(res => {
-  //         console.log('获取token成功', res, rootStore.client);
-  //       });
-  // }, [client]);
-
-  // console.log('rootStore', rootStore.conversationStore.currentCvs);
-
   useEffect(() => {
-    const webimAuth: string | null = sessionStorage.getItem("webim_auth");
-    let webimAuthObj: {
-      agoraId: string;
-      password: string;
-      accessToken: string;
-    } = {
-      agoraId: "",
+    const webImAuth = sessionStorage.getItem("webImAuth");
+
+    console.log("webImAuth", webImAuth);
+    let webImAuthObj = {
+      userId: "",
       password: "",
-      accessToken: "",
+      chatToken: "",
     };
-    if (webimAuth) {
-      webimAuthObj = JSON.parse(webimAuth);
-      if (webimAuthObj.password) {
-        // loginWithToken(
-        //   webimAuthObj.agoraId.toLowerCase(),
-        //   webimAuthObj.accessToken
-        // );
-        // store.dispatch(
-        //   setMyUserInfo({
-        //     agoraId: webimAuthObj.agoraId,
-        //     password: webimAuthObj.password,
-        //   })
-        // );
+    if (webImAuth) {
+      webImAuthObj = JSON.parse(webImAuth);
+      if (webImAuthObj.password) {
+        client.open({
+          user: webImAuthObj.userId,
+          pwd: webImAuthObj.password,
+        });
       } else {
-        // history.push("/login");
+        console.log("webimAuthObj", webImAuthObj);
+        client.open({
+          user: webImAuthObj.userId,
+          accessToken: webImAuthObj.chatToken,
+        });
       }
-      //   store.dispatch(setMyUserInfo({ agoraId: webimAuthObj.agoraId }));
-    } else {
-      //   history.push("/login");
     }
-  }, []);
+  }, [client]);
 
   let {
     topConversation: topConversationInner,
@@ -91,22 +68,6 @@ const ChatApp: FC<any> = () => {
   } = useConversationContext();
 
   let { messages } = useChatContext();
-  console.log(11111, messages);
-  // const topConversation = () => {
-  //   setCurrentConversation({
-  //     chatType: "groupChat",
-  //     conversationId: "226377652568065",
-  //     name: "zd2",
-  //     unreadCount: 0,
-  //   });
-  //   console.log(222, currentConversation);
-  //   console.log("222", rootStore.conversationStore.currentCvs);
-  //   topConversationInner({
-  //     chatType: "groupChat",
-  //     conversationId: "226377652568065",
-  //     lastMessage: {},
-  //   });
-  // };
 
   const thread = rootStore.threadStore;
 
@@ -146,18 +107,6 @@ const ChatApp: FC<any> = () => {
   }, [thread.showThreadPanel]);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const userId = urlParams.get("userId");
-    const password = urlParams.get("password");
-
-    console.log("urlParams", userId, password, urlParams);
-
-    rootStore.client.open({
-      user: userId,
-      pwd: password,
-    });
-
     eventHandler.addEventHandler("chatroom", {
       onError: (err) => {
         console.error(err);
@@ -259,7 +208,7 @@ const ChatApp: FC<any> = () => {
     return item.groupid == cvsItem.conversationId;
   });
   return (
-    <>
+    <div className="main-container">
       <div className="tab-box">
         <div
           className="tab-btn"
@@ -377,6 +326,7 @@ const ChatApp: FC<any> = () => {
                     return null;
                   },
                   messageProps: {
+                    // @ts-ignore
                     onForwardMessage: (msg) => {
                       console.log("onForwardMessage --", msg);
                       // @ts-ignore
@@ -488,6 +438,7 @@ const ChatApp: FC<any> = () => {
               messageListProps={{
                 renderUserProfile: () => null,
                 messageProps: {
+                  // @ts-ignore
                   onForwardMessage: (msg) => {
                     console.log("onForwardMessage --", msg);
                     // @ts-ignore
@@ -623,7 +574,7 @@ const ChatApp: FC<any> = () => {
         </>
       </Modal>
       <Toaster />
-    </>
+    </div>
   );
 };
 
