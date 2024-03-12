@@ -1,11 +1,6 @@
 import "./dev.scss";
-import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
-// import { useHistory } from "react-router-dom";
 import i18next from "../../i18n";
-
-// import { setMyUserInfo } from '../redux/actions'
 import { useNavigate } from "react-router-dom";
-
 import ConfigForm from "./configForm";
 import LoginForm from "./loginForm";
 

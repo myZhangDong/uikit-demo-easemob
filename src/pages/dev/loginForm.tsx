@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Icon } from "easemob-chat-uikit";
 import i18next from "../../i18n";
 
@@ -6,13 +6,24 @@ import loading from "../../assets/loading.png";
 import closeIcon from "../../assets/Xmark@2x.png";
 import eyeOpen from "../../assets/eye@2x.png";
 import eyeClose from "../../assets/eye_slash@2x.png";
-import toast from "react-hot-toast";
+import toast from "../../components/toast/toast";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { loginWithPassword } from "../../store/loginSlice";
+import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const state = useAppSelector((state) => state.login);
+  useEffect(() => {
+    if (state.loggedIn) {
+      navigate("/main");
+    }
+  }, [state.loggedIn]);
   const [values, setValues] = useState({
     userId: "",
     password: "",
   });
-  const [isLonging, setIsLoging] = useState(false);
+  const [isLogging, setIsLogging] = useState(false);
 
   const handleChange =
     (type: "userId" | "password") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +34,7 @@ const LoginForm = () => {
       });
     };
 
-  const clearuserId = () => {
+  const clearUserId = () => {
     setValues({
       ...values,
       userId: "",
@@ -31,12 +42,19 @@ const LoginForm = () => {
   };
 
   const login = () => {
-    setIsLoging(true);
+    return toast.success("登录成功");
+    setIsLogging(true);
     if (values.userId === "" || values.password === "") {
-      setIsLoging(false);
+      setIsLogging(false);
       toast.error("用户名或密码不能为空");
       return;
     }
+    dispatch(
+      loginWithPassword({
+        userId: values.userId,
+        password: values.password,
+      })
+    );
   };
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -46,7 +64,7 @@ const LoginForm = () => {
   };
   return (
     <div className="dev-form">
-      <Icon type="FOLDER" className="language-switch"></Icon>
+      <Icon type="GLOBE" className="language-switch"></Icon>
       <div className="dev-form-icon"></div>
       <div className="dev-form-AC">
         {i18next.t("easemob")} IM Demo <br />
@@ -55,7 +73,7 @@ const LoginForm = () => {
 
       <div className="input-box">
         <input
-          disabled={isLonging}
+          disabled={isLogging}
           className="dev-form-input"
           placeholder={i18next.t("userId")}
           onChange={handleChange("userId")}
@@ -66,14 +84,14 @@ const LoginForm = () => {
           <img
             src={closeIcon}
             alt="close"
-            onClick={clearuserId}
+            onClick={clearUserId}
             className="close-btn"
           />
         )}
       </div>
       <div className="input-box">
         <input
-          disabled={isLonging}
+          disabled={isLogging}
           type={passwordVisible ? "text" : "password"}
           maxLength={32}
           className="dev-form-input"
@@ -95,10 +113,10 @@ const LoginForm = () => {
           disabled={false}
           type="button"
           className="dev-form-input dev-button"
-          value={isLonging ? "" : i18next.t("login")}
+          value={isLogging ? "" : i18next.t("login")}
           onClick={login}
         ></input>
-        {isLonging && (
+        {isLogging && (
           <img className="loading-img" src={loading} alt="loading" />
         )}
       </div>

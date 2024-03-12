@@ -18,7 +18,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useDispatch } from "react-redux";
 const Login = () => {
   console.log(222);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.login);
   useEffect(() => {
     if (state.loggedIn) {
@@ -151,7 +151,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-form">
-        <Icon type="FOLDER" className="language-switch"></Icon>
+        <Icon type="GLOBE" className="language-switch"></Icon>
         <div className="login-form-icon"></div>
         <div className="login-form-AC">{i18next.t("easemob")} IM Demo</div>
         <div className="input-box">

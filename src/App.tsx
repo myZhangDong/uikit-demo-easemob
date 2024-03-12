@@ -23,6 +23,15 @@ const ChatApp: FC<any> = () => {
           appKey: "easemob#easeim",
           useUserInfo: true,
         }}
+        features={{
+          chat: {
+            header: {
+              threadList: true,
+              audioCall: true,
+              videoCall: true,
+            },
+          },
+        }}
       >
         <AppRoutes></AppRoutes>
         <Toaster></Toaster>

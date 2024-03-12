@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from "react";
+import { useEffect, useState, FC, useRef } from "react";
 import ReactDOM from "react-dom/client";
 // import "./index.css";
 import { observer } from "mobx-react-lite";
@@ -29,7 +29,11 @@ import {
 } from "easemob-chat-uikit";
 import "easemob-chat-uikit/style.css";
 import "./main.scss";
-
+import { APP_ID, appKey } from "../../config";
+import { getRtcToken, getRtcChannelMembers } from "../../service/rtc";
+import UserInviteModal from "../../components/userInviteModal/userInviteModal";
+import { set } from "mobx";
+import NavigationBar from "./components/navigationBar/navigationBar";
 // @ts-ignore
 window.rootStore = rootStore;
 const ChatApp: FC<any> = () => {
@@ -70,32 +74,6 @@ const ChatApp: FC<any> = () => {
   let { messages } = useChatContext();
 
   const thread = rootStore.threadStore;
-
-  let TxtMsg = (msg: any) => (
-    <TextMessage
-      bubbleType="secondly"
-      bubbleStyle={{ background: "hsl(135.79deg 88.79% 36.46%)" }}
-      shape="square"
-      arrow={false}
-      avatar={<Avatar style={{ background: "pink" }}>zhangdong</Avatar>}
-      textMessage={{
-        msg: msg.msg || "hello",
-        type: "txt",
-        id: "1234",
-        to: "zd5",
-        from: "zd2",
-        chatType: "singleChat",
-        time: Date.now(),
-        status: "read",
-        bySelf: true,
-        modifiedInfo: {},
-      }}
-    ></TextMessage>
-  );
-
-  let MsgList = (
-    <MessageList renderMessage={(msg) => TxtMsg(msg)}></MessageList>
-  );
 
   const [tab, setTab] = useState("chat");
   const changeTab = (tab: string) => {
@@ -142,21 +120,6 @@ const ChatApp: FC<any> = () => {
     });
   }, []);
 
-  const getRTCToken = (data: any) => {
-    const { channel, chatUserId } = data;
-    const agoraUId = "935243573";
-    const url = `https://a41.chat.agora.io/token/rtc/channel/${channel}/agorauid/${agoraUId}?userAccount=${chatUserId}`;
-    return axios
-      .get(url)
-      .then(function (response) {
-        console.log("getRtctoken", response);
-        return response.data;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
   const handleClickCvs = (cvs: any) => {
     return () => {
       rootStore.conversationStore.setCurrentCvs({
@@ -181,15 +144,15 @@ const ChatApp: FC<any> = () => {
   const [groupSettingVisible, setGroupSettingVisible] = useState(false);
   const [cvsItem, setCvsItem] = useState<any>([]);
   const showGroupSetting = () => {
-    setGroupSettingVisible((value) => !value);
+    isInGroup && setGroupSettingVisible((value) => !value);
     console.log("showGroupSetting");
   };
 
   const [forwardVisible, setForwardVisible] = useState(false);
   const [combineMsg, setCombineMsg] = useState({});
-
+  const [agoraUuId, setAgoraUuId] = useState<string>("");
   const [addContactVisible, setAddContactVisible] = useState(false);
-
+  console.log("agoraUid >>>>", agoraUuId);
   useEffect(() => {
     if (cvsItem.conversationId !== rootStore.conversationStore.currentCvs) {
       setCvsItem(rootStore.conversationStore.currentCvs);
@@ -207,6 +170,58 @@ const ChatApp: FC<any> = () => {
     // @ts-ignore
     return item.groupid == cvsItem.conversationId;
   });
+
+  const getRtcToken2 = (data: {
+    channel: string | number;
+    chatUserId: string;
+  }) => {
+    console.log("获取token >>", data);
+    return getRtcToken({
+      channelName: data.channel,
+      username: data.chatUserId,
+      appKey: appKey,
+    }).then((res) => {
+      console.log("获取token成功", res);
+      const { agoraUserId, accessToken } = res;
+      setAgoraUuId(String(agoraUserId));
+      return {
+        agoraUid: agoraUserId,
+        accessToken,
+      };
+    });
+  };
+
+  let _resolve = useRef<any>(null);
+  const [rtcGroupId, setRtcGroupId] = useState("");
+  const handleInviteUser = (data: any) => {
+    console.log("handleInviteToCall", data);
+    setRtcGroupId(data.conversation.conversationId);
+    setUserInviteModalVisible(true);
+    // getGroupMembers(data.conversation.conversationId)
+    setJoinedRtcRoomUsers([{ userId: rootStore.client.user }]);
+    return new Promise((resolve, reject) => {
+      _resolve.current = resolve;
+    });
+  };
+  const handleGetIdMap = (data: { userId: string; channel: string }) => {
+    console.log("获取房间成员", data);
+    return getRtcChannelMembers({
+      username: data.userId,
+      channelName: data.channel,
+      appKey: appKey,
+    }).then((res) => {
+      console.log("获取房间成员成功", res);
+      return res;
+    });
+  };
+
+  const handleRtcStateChange = (state: any) => {
+    console.log("handleRtcStateChange", state);
+  };
+  const [userInviteModalVisible, setUserInviteModalVisible] = useState(false);
+  const [joinedRtcRoomUsers, setJoinedRtcRoomUsers] = useState<
+    { userId: string }[]
+  >([]);
   return (
     <div className="main-container">
       <div className="tab-box">
@@ -305,7 +320,7 @@ const ChatApp: FC<any> = () => {
       </div>
       <div
         style={{
-          width: "65%",
+          flex: 1,
           overflow: "hidden",
           display: "flex",
         }}
@@ -362,27 +377,50 @@ const ChatApp: FC<any> = () => {
                   },
                 }}
                 headerProps={{
-                  moreAction:
-                    cvsItem.chatType == "groupChat"
-                      ? {
-                          visible: false,
-                          actions: [{ content: "" }],
-                        }
-                      : undefined,
-                  suffixIcon:
-                    cvsItem.chatType == "groupChat" && isInGroup ? (
-                      <Icon
-                        type="ELLIPSIS"
-                        width={24}
-                        height={24}
-                        onClick={showGroupSetting}
-                      ></Icon>
-                    ) : undefined,
+                  moreAction: {
+                    visible: true,
+                    actions: [],
+                  },
+                  onClickEllipsis: showGroupSetting,
+                  // cvsItem.chatType == "groupChat"
+                  //   ? {
+                  //       visible: false,
+                  //       actions: [{ content: "" }],
+                  //     }
+                  //   : undefined,
+                  // suffixIcon:
+                  //   cvsItem.chatType == "groupChat" && isInGroup ? (
+                  //     <Icon
+                  //       type="ELLIPSIS"
+                  //       width={24}
+                  //       height={24}
+                  //       onClick={showGroupSetting}
+                  //     ></Icon>
+                  //   ) : undefined,
                 }}
                 rtcConfig={{
-                  getRTCToken: getRTCToken,
+                  // @ts-ignore
+                  onInvite: handleInviteUser,
+                  agoraUid: agoraUuId,
+                  getIdMap: handleGetIdMap,
+                  onStateChange: handleRtcStateChange,
+                  appId: APP_ID,
+                  getRTCToken: getRtcToken2,
                   //@ts-ignore
-                  getIdMap: () => {},
+                  onAddPerson: (data: any) => {
+                    console.log("onAddPerson", data);
+                    setUserInviteModalVisible(true);
+
+                    const joinedUsers = data.joinedMembers.map(
+                      (item: { agoraUid: number; imUserId: string }) => {
+                        return { userId: item.imUserId };
+                      }
+                    );
+                    setJoinedRtcRoomUsers(joinedUsers);
+                    return new Promise((resolve) => {
+                      _resolve.current = resolve;
+                    });
+                  },
                 }}
               ></Chat>
               {groupSettingVisible && (
@@ -482,11 +520,7 @@ const ChatApp: FC<any> = () => {
           ></GroupSetting>
         </div> */}
       </div>
-      {/* <div>
-        <Button onClick={getUrlPreviewInfo}>getUrlPreviewInfo</Button>
-        <Button onClick={topConversation}>top 2808</Button>
-        <br />
-      </div> */}
+
       <UserSelect
         onCancel={() => {
           setUserSelectVisible(false);
@@ -573,6 +607,20 @@ const ChatApp: FC<any> = () => {
           </div>
         </>
       </Modal>
+      {/** 音视频邀请用户组件 */}
+      <UserInviteModal
+        visible={userInviteModalVisible}
+        groupId={rtcGroupId}
+        onClose={() => {
+          setUserInviteModalVisible(false);
+        }}
+        onInvite={(users) => {
+          console.log("users >>", users);
+          _resolve.current(users);
+          setUserInviteModalVisible(false);
+        }}
+        checkedUsers={joinedRtcRoomUsers}
+      ></UserInviteModal>
       <Toaster />
     </div>
   );

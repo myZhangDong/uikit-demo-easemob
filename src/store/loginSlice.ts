@@ -34,6 +34,22 @@ export const loginSlice = createSlice({
       state.chatToken = action.payload.chatToken;
     },
 
+    loginWithPassword: (
+      state,
+      action: PayloadAction<{ userId: string; password: string }>
+    ) => {
+      const { client } = rootStore;
+      console.log("client >>>", client);
+      console.log("loginWithPassword", action.payload);
+      client.open({
+        user: action.payload.userId,
+        pwd: action.payload.password,
+      });
+      //设置 userId
+      state.userId = action.payload.userId;
+      state.password = action.payload.password;
+    },
+
     setLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.loggedIn = action.payload;
       if (action.payload && state.userId) {
@@ -50,8 +66,13 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { setPhoneNumber, setChatToken, loginWithToken, setLoggedIn } =
-  loginSlice.actions;
+export const {
+  setPhoneNumber,
+  setChatToken,
+  loginWithToken,
+  loginWithPassword,
+  setLoggedIn,
+} = loginSlice.actions;
 
 export default loginSlice.reducer;
 export const selectState = (state: RootState) => state.login;
