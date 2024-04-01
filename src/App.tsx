@@ -17,11 +17,13 @@ import { updateAppConfig } from "./store/appConfigSlice";
 window.rootStore = rootStore;
 
 const ChatApp: FC<any> = () => {
+  const state = useAppSelector((state) => state.appConfig);
+  const loginState = useAppSelector((state) => state.login);
+
   useEffect(() => {
     listener(store);
-  }, []);
+  }, [loginState.appKey]);
 
-  const state = useAppSelector((state) => state.appConfig);
   console.log("111111", state);
 
   const [config, setConfig] = useState({
@@ -54,10 +56,7 @@ const ChatApp: FC<any> = () => {
       },
     },
   });
-  // const [primaryColor, setPrimaryColor] = useState(state.color.a);
-  // useEffect(() => {
-  //   setPrimaryColor(state.color.a);
-  // }, [state.color]);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     const localGeneralConfig = localStorage.getItem("generalConfig");
@@ -101,10 +100,16 @@ const ChatApp: FC<any> = () => {
       },
     });
   }, [state]);
+
+  const serverConfig = JSON.parse(localStorage.getItem("serverConfig") || "{}");
+  console.log("app", loginState.useDNS, serverConfig);
   return (
     <Provider
       initConfig={{
-        appKey: "easemob#easeim",
+        appKey: loginState.appKey,
+        isHttpDNS: loginState.useDNS,
+        restUrl: serverConfig.rest,
+        msyncUrl: serverConfig.msync,
         useUserInfo: true,
         translationTargetLanguage: window.navigator.language,
       }}

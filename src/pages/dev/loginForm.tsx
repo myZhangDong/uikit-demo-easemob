@@ -63,7 +63,6 @@ const LoginForm = () => {
   };
   return (
     <div className="dev-form">
-      <Icon type="GLOBE" className="language-switch"></Icon>
       <div className="dev-form-icon"></div>
       <div className="dev-form-AC">
         {i18next.t("easemob")} IM Demo <br />

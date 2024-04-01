@@ -3,9 +3,18 @@ import { ChangeEvent } from "react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { setSDKConfig } from "../../store/loginSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks";
 const ConfigForm = () => {
+  const dispatch = useAppDispatch();
   const saveConfig = () => {
     localStorage.setItem("serverConfig", JSON.stringify(config));
+    dispatch(
+      setSDKConfig({
+        appKey: config.appkey,
+        useDNS: !config.useCustomServer,
+      })
+    );
     toast.success("保存成功");
   };
 
@@ -18,9 +27,16 @@ const ConfigForm = () => {
   });
 
   useEffect(() => {
-    const config = localStorage.getItem("serverConfig");
+    const config = JSON.parse(localStorage.getItem("serverConfig") || "{}");
     if (config) {
-      setConfig(JSON.parse(config));
+      setConfig(config);
+
+      dispatch(
+        setSDKConfig({
+          appKey: config.appkey,
+          useDNS: !config.useCustomServer,
+        })
+      );
     }
   }, []);
 

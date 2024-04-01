@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { rootStore } from "../UIKit/uikitListener";
 import type { RootState } from "./store";
+import { appKey } from "../config";
 export const loginSlice = createSlice({
   name: "login",
   initialState: {
@@ -9,6 +10,8 @@ export const loginSlice = createSlice({
     password: "",
     userId: "",
     loggedIn: false,
+    appKey: appKey,
+    useDNS: true,
   },
   reducers: {
     setPhoneNumber: (state, action: PayloadAction<string>) => {
@@ -71,6 +74,14 @@ export const loginSlice = createSlice({
       state.loggedIn = false;
       sessionStorage.removeItem("webImAuth");
     },
+
+    setSDKConfig: (
+      state,
+      action: PayloadAction<{ appKey: string; useDNS: boolean }>
+    ) => {
+      state.appKey = action.payload.appKey;
+      state.useDNS = action.payload.useDNS;
+    },
   },
 });
 
@@ -81,6 +92,7 @@ export const {
   loginWithPassword,
   setLoggedIn,
   logout,
+  setSDKConfig,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
