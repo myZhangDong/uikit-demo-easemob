@@ -63,6 +63,14 @@ export const loginSlice = createSlice({
         );
       }
     },
+
+    logout: (state) => {
+      const { client } = rootStore;
+      rootStore.clear();
+      client.close();
+      state.loggedIn = false;
+      sessionStorage.removeItem("webImAuth");
+    },
   },
 });
 
@@ -72,6 +80,7 @@ export const {
   loginWithToken,
   loginWithPassword,
   setLoggedIn,
+  logout,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

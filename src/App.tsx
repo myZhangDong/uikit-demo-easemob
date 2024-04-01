@@ -9,6 +9,10 @@ import AppRoutes from "./routes/routes";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./store/store";
 import listener from "./UIKit/uikitListener";
+import { useSelector } from "react-redux";
+import i18next from "./i18n";
+import { useAppSelector, useAppDispatch } from "./hooks";
+import { updateAppConfig } from "./store/appConfigSlice";
 // @ts-ignore
 window.rootStore = rootStore;
 
@@ -16,27 +20,109 @@ const ChatApp: FC<any> = () => {
   useEffect(() => {
     listener(store);
   }, []);
+
+  const state = useAppSelector((state) => state.appConfig);
+  console.log("111111", state);
+
+  const [config, setConfig] = useState({
+    conversationList: {
+      search: true,
+      item: {
+        moreAction: true,
+        deleteConversation: true,
+        presence: false,
+      },
+    },
+    chat: {
+      header: {
+        threadList: state.thread,
+        audioCall: true,
+        videoCall: true,
+      },
+      message: {
+        status: true,
+        reaction: state.reaction,
+        thread: state.thread,
+        recall: false,
+        translate: state.translation,
+        edit: true,
+        delete: true,
+        report: true,
+      },
+      messageInput: {
+        typing: state.typing,
+      },
+    },
+  });
+  // const [primaryColor, setPrimaryColor] = useState(state.color.a);
+  // useEffect(() => {
+  //   setPrimaryColor(state.color.a);
+  // }, [state.color]);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const localGeneralConfig = localStorage.getItem("generalConfig");
+    if (localGeneralConfig) {
+      const config = JSON.parse(localGeneralConfig);
+      dispatch(updateAppConfig(config));
+      i18next.changeLanguage(config.language);
+    }
+  }, []);
+
+  useEffect(() => {
+    setConfig({
+      conversationList: {
+        search: true,
+        item: {
+          moreAction: true,
+          deleteConversation: true,
+          presence: false,
+        },
+      },
+
+      chat: {
+        header: {
+          threadList: state.thread,
+          audioCall: true,
+          videoCall: true,
+        },
+        message: {
+          status: true,
+          reaction: state.reaction,
+          thread: state.thread,
+          recall: true,
+          translate: state.translation,
+          edit: true,
+          delete: true,
+          report: true,
+        },
+        messageInput: {
+          typing: state.typing,
+        },
+      },
+    });
+  }, [state]);
   return (
-    <ReduxProvider store={store}>
-      <Provider
-        initConfig={{
-          appKey: "easemob#easeim",
-          useUserInfo: true,
-        }}
-        features={{
-          chat: {
-            header: {
-              threadList: true,
-              audioCall: true,
-              videoCall: true,
-            },
-          },
-        }}
-      >
-        <AppRoutes></AppRoutes>
-        <Toaster></Toaster>
-      </Provider>
-    </ReduxProvider>
+    <Provider
+      initConfig={{
+        appKey: "easemob#easeim",
+        useUserInfo: true,
+        translationTargetLanguage: window.navigator.language,
+      }}
+      features={config}
+      theme={{
+        primaryColor: state.color.h,
+        mode: state.dark ? "dark" : "light",
+        bubbleShape: state.theme == "classic" ? "square" : "ground",
+        avatarShape: state.theme == "classic" ? "square" : "circle",
+        componentsShape: state.theme == "classic" ? "square" : "ground",
+      }}
+      local={{
+        lng: state.language || "zh",
+      }}
+    >
+      <AppRoutes></AppRoutes>
+      <Toaster></Toaster>
+    </Provider>
   );
 };
 

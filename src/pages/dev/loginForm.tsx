@@ -42,7 +42,6 @@ const LoginForm = () => {
   };
 
   const login = () => {
-    return toast.success("登录成功");
     setIsLogging(true);
     if (values.userId === "" || values.password === "") {
       setIsLogging(false);

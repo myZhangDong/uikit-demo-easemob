@@ -179,3 +179,21 @@
     margin-left: -2%;
     margin-top: -10px;
 }
+
+.login-form-checkbox:checked::after {
+    content: "\2713";
+    color: #fff;
+    width: 13px;
+    height: 13px;
+    background-color: var(--cui-primary-color5, hsla(220.1086956521739, 100%, 50%, 1));
+    border-radius: 3px;
+    text-align: center;
+    line-height: 13px;
+    display: block;
+}
+
+.login-form-protocol a{
+    text-decoration: none; 
+    color: rgb(0, 158, 255);
+}
+

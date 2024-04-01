@@ -8,7 +8,6 @@ import React, {
 import i18next from "../../i18n";
 import loading from "../../assets/loading.png";
 import closeIcon from "../../assets/Xmark@2x.png";
-import { HuePicker } from "react-color";
 import { Icon } from "easemob-chat-uikit";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -16,10 +15,12 @@ import { sendSms, getChatToken } from "../../service/login";
 import { loginWithToken } from "../../store/loginSlice";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useDispatch } from "react-redux";
+import { updateAppConfig } from "../../store/appConfigSlice";
+import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from "../../config";
 const Login = () => {
-  console.log(222);
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.login);
+  const appConfigState = useAppSelector((state) => state.appConfig);
   useEffect(() => {
     if (state.loggedIn) {
       navigate("/main");
@@ -63,7 +64,7 @@ const Login = () => {
       return;
     }
     if (values.phoneNumber.length !== 11) {
-      toast.error("请输入正确的手机号码");
+      toast.error(i18next.t("Please enter the correct phone number"));
       return;
     }
     sendSms(values.phoneNumber)
@@ -85,21 +86,25 @@ const Login = () => {
         console.log("error", error.response);
         if (error.response.status == "400") {
           if (error.response.data?.errorInfo == "phone number illegal") {
-            toast.error("请输入正确的手机号！");
+            i18next.t("Please enter the correct phone number");
           } else if (
             error.response.data?.errorInfo ==
             "Please wait a moment while trying to send."
           ) {
-            toast.error("你的操作过于频繁，请稍后再试！");
+            toast.error(
+              `${i18next.t(
+                "Your operation is too frequent, please try again later"
+              )}!`
+            );
           } else if (
             error.response.data?.errorInfo.includes("exceed the limit")
           ) {
-            toast.error("获取已达上限！");
+            toast.error(i18next.t("Obtaining has reached the maximum limit"));
           } else {
             toast.error(error.response.data?.errorInfo);
           }
         } else {
-          toast.error("获取验证码失败！");
+          toast.error(i18next.t("Failed to obtain verification code"));
         }
       });
   };
@@ -108,6 +113,17 @@ const Login = () => {
     setAgree(event.target.checked);
   };
   const login = () => {
+    if (!agree) {
+      toast.error(i18next.t("Please agree to privacy and policies"));
+      return;
+    } else if (values.phoneNumber.length !== 11) {
+      toast.error(i18next.t("Please enter the correct phone number"));
+      return;
+    } else if (values.vCode.length !== 6) {
+      toast.error(i18next.t("Please enter the correct verification code"));
+      return;
+    }
+
     setIsLogging(true);
 
     getChatToken(values.phoneNumber, values.vCode)
@@ -120,25 +136,27 @@ const Login = () => {
       .catch(function (error) {
         switch (error.response?.data?.errorInfo) {
           case "UserId password error.":
-            toast.error("用户名或密码错误！");
+            toast.error(i18next.t("Incorrect username or password"));
             break;
           case `UserId ${values.phoneNumber} does not exist.`:
-            toast.error("登录用户不存在");
+            toast.error(i18next.t("user does not exist"));
             break;
           case "phone number illegal":
-            toast.error("请输入正确的手机号");
+            toast.error(i18next.t("Please enter the correct phone number"));
             break;
           case "SMS verification code error.":
-            toast.error("验证码错误");
+            toast.error(i18next.t("Verification code error"));
             break;
           case "Sms code cannot be empty":
-            toast.error("验证码不能为空");
+            toast.error(i18next.t("The verification code cannot be empty"));
             break;
           case "Please send SMS to get mobile phone verification code.":
-            toast.error("请使用短信验证码登录");
+            toast.error(
+              i18next.t("Please use SMS verification code to log in")
+            );
             break;
           default:
-            toast.error("登录失败，请重试！");
+            toast.error(i18next.t("Login failed, please try again"));
             break;
         }
         setIsLogging(false);
@@ -148,10 +166,26 @@ const Login = () => {
   const goDev = () => {
     navigate("/dev", { replace: true });
   };
+
+  const changeLang = () => {
+    console.log("i18next.language", i18next.language);
+    const lang = i18next.language === "zh" ? "en" : "zh";
+    dispatch(updateAppConfig({ language: lang }));
+    i18next.changeLanguage(lang);
+  };
   return (
     <div className="login-container">
       <div className="login-form">
-        <Icon type="GLOBE" className="language-switch"></Icon>
+        <div title={i18next.t("switchLanguage")}>
+          <Icon
+            type="GLOBE"
+            width={24}
+            height={24}
+            className="language-switch"
+            onClick={changeLang}
+          ></Icon>
+        </div>
+
         <div className="login-form-icon"></div>
         <div className="login-form-AC">{i18next.t("easemob")} IM Demo</div>
         <div className="input-box">
@@ -185,7 +219,9 @@ const Login = () => {
           <div className="login-form-getCode" onClick={getVCode}>
             {isCounting ? (
               <span style={{ color: "#ACB4B9" }}>
-                {`${countdown}秒后重新获取`}
+                {appConfigState.language == "zh"
+                  ? `${countdown}秒后重新获取`
+                  : `Retrieve after ${countdown}s`}
               </span>
             ) : (
               <span style={{ color: isLogging ? "#ACB4B9" : "#009EFF" }}>
@@ -212,21 +248,37 @@ const Login = () => {
             checked={agree}
             type="checkbox"
             onChange={handleAgreeChange}
+            className="login-form-checkbox"
           ></input>
           <div>
             {i18next.t("agree")}{" "}
-            <span style={{ color: isLogging ? "#ACB4B9" : "#009EFF" }}>
-              《隐私和政策》
+            <span
+              style={{ color: isLogging ? "#ACB4B9" : "#009EFF" }}
+              className="login-form-protocol"
+            >
+              《
+              <a target="blank" href="https://www.easemob.com/terms">
+                {i18next.t("privacy")}
+              </a>
+              {i18next.t("and")}
+              <a target="blank" href="https://www.easemob.com/protocol">
+                {i18next.t("policy")}
+              </a>
+              》
             </span>{" "}
           </div>
         </div>
       </div>
       <div className="login-copyright">
-        © 2024 环信，SDK版本：4.1.1 UIkit版本：1.0.1 Demo版本：2.0.0
+        {appConfigState.language == "zh"
+          ? `© 2024 环信，SDK版本：${SDK_VERSION} UIkit版本：${UIKIT_VERSION} Demo版本：${DEMO_VERSION}`
+          : `2024 Easemob Inc, SDK Version: ${SDK_VERSION}  UIkit Version: ${UIKIT_VERSION}  Demo Version: ${DEMO_VERSION}`}
         <span onDoubleClick={goDev}>{"</>"}</span>
       </div>
     </div>
   );
 };
-
+// console.log(i18n.t(`I have ${count} ${fruit}`));
+// 2024 Easemob Inc, SDK Version: 4.1.1  UIkit Version: Beta0.1.1  Demo Version: 2.0.0
+// Privacy and Policy
 export default Login;

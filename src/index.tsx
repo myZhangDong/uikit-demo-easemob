@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "easemob-chat-uikit";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "./store/store";
+
 // const root = ReactDOM.createRoot(
 //   document.getElementById('root') as HTMLElement
 // );
@@ -15,7 +18,10 @@ import { Provider } from "easemob-chat-uikit";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <div>
-    <Provider
+    <ReduxProvider store={store}>
+      <App></App>
+    </ReduxProvider>
+    {/* <Provider
       initConfig={{
         appKey: "easemob#easeim",
         useUserInfo: true,
@@ -23,7 +29,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         // password: "1",
       }}
       theme={{
-        mode: "light",
+        mode: "dark",
         bubbleShape: "square",
         avatarShape: "square",
         componentsShape: "square",
@@ -68,6 +74,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       }}
     >
       <App></App>
-    </Provider>
+    </Provider> */}
   </div>
 );
