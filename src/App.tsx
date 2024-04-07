@@ -22,7 +22,7 @@ const ChatApp: FC<any> = () => {
 
   useEffect(() => {
     listener(store);
-  }, [loginState.appKey]);
+  }, [loginState.appKey, loginState.useDNS]);
 
   console.log("111111", state);
 

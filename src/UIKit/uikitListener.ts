@@ -6,7 +6,6 @@ import { notification } from "../utils/notification";
 import toast from "react-hot-toast";
 import i18next from "../i18n";
 const listener = (store: any) => {
-  console.log(33);
   const { client } = rootStore;
   const dispatch = store.dispatch;
 
@@ -46,8 +45,23 @@ const listener = (store: any) => {
     addReaction: {
       error: (error) => {
         console.log("addReaction error", error);
-        if (error.type == "50") {
+        if (error.type == 50) {
           toast.error(`Reaction ${i18next.t("Exceeded maximum number")}`);
+        }
+      },
+    },
+    addContact: {
+      success: () => {
+        toast.success(i18next.t("Request sent"));
+      },
+      error: (error) => {
+        if (
+          error.type == 204 &&
+          error.message == "Service resource not found"
+        ) {
+          toast.error(i18next.t("User does not exist"));
+        } else {
+          toast.error(i18next.t("Request failed"));
         }
       },
     },

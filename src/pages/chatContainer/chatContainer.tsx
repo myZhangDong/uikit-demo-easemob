@@ -218,17 +218,17 @@ const ChatContainer = forwardRef((props, ref) => {
                     },
                   },
                   {
-                    content: i18next.t("createGroup"),
-                    onClick: () => {
-                      console.log("create group");
-                      setUserSelectVisible(true);
-                    },
-                  },
-                  {
                     content: i18next.t("addContact"),
                     onClick: () => {
                       setAddContactVisible(true);
                       // setUserSelectVisible(true);
+                    },
+                  },
+                  {
+                    content: i18next.t("createGroup"),
+                    onClick: () => {
+                      console.log("create group");
+                      setUserSelectVisible(true);
                     },
                   },
                 ],
@@ -585,7 +585,7 @@ const ChatContainer = forwardRef((props, ref) => {
           setAddContactVisible(false);
         }}
         closable={false}
-        title="添加联系人"
+        title={i18next.t("addContact")}
       >
         <>
           <div className="add-contact">

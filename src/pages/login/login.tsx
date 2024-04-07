@@ -12,15 +12,24 @@ import { Icon } from "easemob-chat-uikit";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { sendSms, getChatToken } from "../../service/login";
-import { loginWithToken } from "../../store/loginSlice";
+import { loginWithToken, setSDKConfig } from "../../store/loginSlice";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { updateAppConfig } from "../../store/appConfigSlice";
-import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from "../../config";
+import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION, appKey } from "../../config";
 const Login = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.login);
   const appConfigState = useAppSelector((state) => state.appConfig);
+
+  useEffect(() => {
+    dispatch(
+      setSDKConfig({
+        appKey: appKey,
+        useDNS: true,
+      })
+    );
+  }, []);
   useEffect(() => {
     if (state.loggedIn) {
       navigate("/main");
@@ -187,7 +196,7 @@ const Login = () => {
         </div>
 
         <div className="login-form-icon"></div>
-        <div className="login-form-AC">{i18next.t("easemob")} IM Demo</div>
+        <div className="login-form-AC">{i18next.t("easemob")} IM</div>
         <div className="input-box">
           <input
             disabled={isLogging}
