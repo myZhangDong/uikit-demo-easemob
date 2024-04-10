@@ -16,7 +16,6 @@ import classNames from "classnames";
 import ImageCrop from "../../../components/imageCrop/imageCrop";
 import toast from "../../../components/toast/toast";
 const PersonalInfo = () => {
-  const componentsShape = "square";
   const prefixCls = "user-info";
   const { addressStore } = rootStore;
   const [nicknameModalVisible, setNicknameModalVisible] = useState(false);
@@ -134,7 +133,7 @@ const PersonalInfo = () => {
             <Avatar
               src={addressStore.appUsersInfo[rootStore.client.user]?.avatarurl}
               size={100}
-              shape={componentsShape}
+              shape={theme?.avatarShape}
             >
               {addressStore.appUsersInfo[rootStore.client.user]?.nickname}
             </Avatar>
@@ -186,7 +185,7 @@ const PersonalInfo = () => {
                         ?.avatarurl
                     }
                     size={40}
-                    shape={componentsShape}
+                    shape={theme?.avatarShape}
                   >
                     {addressStore.appUsersInfo[rootStore.client.user]?.nickname}
                   </Avatar>

@@ -65,9 +65,7 @@ const ChatContainer = forwardRef((props, ref) => {
   const context = useContext(RootContext);
   const { theme } = context;
   const themeMode = theme?.mode;
-  console.log("context >>>", context);
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setUserId(e.target.value);
   };
 
@@ -77,6 +75,9 @@ const ChatContainer = forwardRef((props, ref) => {
   });
   const handleEllipsisClick = () => {
     if (cvsItem.chatType == "groupChat") {
+      if (thread.showThreadPanel) {
+        rootStore.threadStore.setThreadVisible(false);
+      }
       isInGroup && setConversationDetailVisible((value) => !value);
     } else {
       setConversationDetailVisible((value) => !value);
@@ -84,13 +85,11 @@ const ChatContainer = forwardRef((props, ref) => {
   };
 
   const handleGetIdMap = (data: { userId: string; channel: string }) => {
-    console.log("获取房间成员", data);
     return getRtcChannelMembers({
       username: data.userId,
       channelName: data.channel,
       appKey: appKey,
     }).then((res) => {
-      console.log("获取房间成员成功", res);
       return res;
     });
   };
@@ -103,13 +102,11 @@ const ChatContainer = forwardRef((props, ref) => {
     channel: string | number;
     chatUserId: string;
   }) => {
-    console.log("获取token >>", data);
     return getRtcToken({
       channelName: data.channel,
       username: data.chatUserId,
       appKey: appKey,
     }).then((res) => {
-      console.log("获取token成功", res);
       const { agoraUserId, accessToken } = res;
       setAgoraUuId(String(agoraUserId));
       return {
@@ -121,7 +118,6 @@ const ChatContainer = forwardRef((props, ref) => {
 
   const [mediaType, setMediaType] = useState<"audio" | "video">("audio");
   const handleInviteUser = (data: any) => {
-    console.log("handleInviteToCall", data);
     setMediaType(data.type);
     setRtcGroupId(data.conversation.conversationId);
 
@@ -134,7 +130,6 @@ const ChatContainer = forwardRef((props, ref) => {
   };
 
   const handleRing = (data: any) => {
-    console.log("handleRing", data);
     if (data.type === 2 || data.type === 3) {
       let groupAvatarUrl = rootStore.addressStore.groups.find(
         (item: any) => item.groupid === data.groupId
@@ -155,8 +150,6 @@ const ChatContainer = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (rootStore.loginState) {
-      console.log("群组数据", rootStore.addressStore.groups);
-
       const groupIds =
         rootStore.addressStore.groups
           .filter((item) => !item.avatarUrl)
@@ -165,7 +158,6 @@ const ChatContainer = forwardRef((props, ref) => {
             return item.groupid;
           }) || [];
       getGroupAvatar(groupIds).then((res) => {
-        console.log("getGroupAvatar success", res);
         for (let groupId in res) {
           rootStore.addressStore.updateGroupAvatar(groupId, res[groupId]);
         }
@@ -211,13 +203,28 @@ const ChatContainer = forwardRef((props, ref) => {
                 ),
                 actions: [
                   {
-                    content: i18next.t("createConversation"),
+                    icon: (
+                      <Icon
+                        type="BUBBLE_FILL"
+                        width={24}
+                        height={24}
+                        color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                      />
+                    ),
+                    content: i18next.t("newConversation"),
                     onClick: () => {
-                      console.log("create group");
                       setCreateChatVisible(true);
                     },
                   },
                   {
+                    icon: (
+                      <Icon
+                        type="PERSON_ADD_FILL"
+                        width={24}
+                        height={24}
+                        color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                      />
+                    ),
                     content: i18next.t("addContact"),
                     onClick: () => {
                       setAddContactVisible(true);
@@ -225,20 +232,31 @@ const ChatContainer = forwardRef((props, ref) => {
                     },
                   },
                   {
+                    icon: (
+                      <Icon
+                        type="PERSON_DOUBLE_FILL"
+                        width={24}
+                        height={24}
+                        color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                      />
+                    ),
                     content: i18next.t("createGroup"),
                     onClick: () => {
-                      console.log("create group");
                       setUserSelectVisible(true);
                     },
                   },
                 ],
+                tooltipProps: {
+                  placement: "bottomRight",
+                },
               }}
-              content={<div className="header-content">Chats</div>}
+              content={
+                <div className="header-content">{i18next.t("chats")}</div>
+              }
               avatar={<></>}
             ></Header>
           )}
           onItemClick={(item) => {
-            console.log("cvsItem", item);
             setConversationDetailVisible(false);
             setCvsItem(item);
           }}
@@ -264,6 +282,11 @@ const ChatContainer = forwardRef((props, ref) => {
           )}
           <Chat
             ref={chatRef}
+            onOpenThread={() => {
+              if (conversationDetailVisible) {
+                setConversationDetailVisible(false);
+              }
+            }}
             messageListProps={{
               renderUserProfile: () => {
                 return null;
@@ -345,7 +368,6 @@ const ChatContainer = forwardRef((props, ref) => {
             messageInputProps={{
               enabledTyping: true,
               onSendMessage: (msg) => {
-                console.log("message", msg);
                 if (msg.type == "combine") {
                   setCombineMsg(msg);
                   setForwardVisible(true);
@@ -356,6 +378,9 @@ const ChatContainer = forwardRef((props, ref) => {
               moreAction: {
                 visible: true,
                 actions: [],
+                tooltipProps: {
+                  placement: "bottomRight",
+                },
               },
               onClickEllipsis: handleEllipsisClick,
             }}
@@ -391,7 +416,7 @@ const ChatContainer = forwardRef((props, ref) => {
 
           {/** 是否显示群组设置 */}
           {conversationDetailVisible && (
-            <div style={{ width: "350px", borderLeft: "1px solid green" }}>
+            <div className="chat-container-chat-right">
               {cvsItem.chatType == "groupChat" ? (
                 <GroupDetail
                   conversation={{
@@ -425,14 +450,7 @@ const ChatContainer = forwardRef((props, ref) => {
         </div>
         {/** 是否显示子区 */}
         {thread.showThreadPanel && (
-          <div
-            style={{
-              width: "350px",
-              borderLeft: "1px solid #eee",
-              overflow: "hidden",
-              background: "#fff",
-            }}
-          >
+          <div className="chat-container-chat-right">
             <Thread
               messageListProps={{
                 renderUserProfile: () => null,
@@ -521,6 +539,7 @@ const ChatContainer = forwardRef((props, ref) => {
           );
           setUserSelectVisible(false);
         }}
+        okText={i18next.t("create")}
         enableMultipleSelection
         onUserSelect={(user, users) => {
           setSelectedUsers(users);
@@ -543,7 +562,6 @@ const ChatContainer = forwardRef((props, ref) => {
             menu={["groups", "contacts"]}
             header={<></>}
             onItemClick={(data) => {
-              console.log("data", data);
               // @ts-ignore
               combineMsg.to = data.id;
               // @ts-ignore
@@ -559,7 +577,6 @@ const ChatContainer = forwardRef((props, ref) => {
               //   //@ts-ignore
               //   lastMessage: combineMsg,
               // })
-              console.log("cvs-----", cvsItem);
               rootStore.messageStore.setSelectedMessage(cvsItem, {
                 selectable: false,
                 selectedMessage: [],
@@ -584,13 +601,14 @@ const ChatContainer = forwardRef((props, ref) => {
           rootStore.addressStore.addContact(userId);
           setAddContactVisible(false);
         }}
+        okText={i18next.t("add")}
         closable={false}
         title={i18next.t("addContact")}
       >
         <>
           <div className="add-contact">
-            userId:{" "}
             <Input
+              placeholder={i18next.t("enterUserID")}
               className="add-contact-input"
               onChange={handleUserIdChange}
             ></Input>
@@ -610,7 +628,6 @@ const ChatContainer = forwardRef((props, ref) => {
           setUserInviteModalVisible(false);
         }}
         onInvite={(users) => {
-          console.log("users >>", users);
           _resolve.current(users);
           setUserInviteModalVisible(false);
         }}

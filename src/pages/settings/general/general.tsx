@@ -32,7 +32,9 @@ const General = () => {
   const dispatch = useAppDispatch();
 
   const prefixCls = "user-info";
-
+  const context = useContext(RootContext);
+  const { theme } = context;
+  const appThemeMode = theme?.mode;
   const [generalConfig, setGeneralConfig] = useState<GeneralConfig>({
     typing: state.typing,
     dark: state.dark,
@@ -81,12 +83,21 @@ const General = () => {
     <ul className={`cui-header-more`}>
       {themes.map((theme, index) => (
         <li
+          className={appThemeMode == "dark" ? "cui-li-dark" : ""}
+          style={{
+            width: "212px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
           key={index}
           onClick={() => {
             setTheme(theme);
           }}
         >
           {i18next.t(theme)}
+          {generalConfig.theme == theme && (
+            <Icon type="CHECK" width={14} height={14}></Icon>
+          )}
         </li>
       ))}
     </ul>
@@ -145,20 +156,26 @@ const General = () => {
     <ul className={`cui-header-more`}>
       {langs.map((lang, index) => (
         <li
+          className={appThemeMode == "dark" ? "cui-li-dark" : ""}
+          style={{
+            width: "212px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
           key={index}
           onClick={() => {
             setLanguage(lang);
           }}
         >
           {i18next.t(lang)}
+          {generalConfig.language == lang && (
+            <Icon type="CHECK" width={14} height={14}></Icon>
+          )}
         </li>
       ))}
     </ul>
   );
 
-  const context = useContext(RootContext);
-  const { theme } = context;
-  const appThemeMode = theme?.mode;
   return (
     <div
       className={classNames("setting-personal", {
@@ -221,22 +238,24 @@ const General = () => {
               >
                 <span>{i18next.t("changeTheme")}</span>
                 <div>
-                  <div>{i18next.t(generalConfig.theme)}</div>
                   <Tooltip
                     title={themeMenu}
                     trigger="click"
-                    placement="bottom"
+                    placement="bottomLeft"
                     open={themeMenuOpen}
                     onOpenChange={(value: boolean) => {
                       setThemeMenuOpen(value);
                     }}
                   >
-                    <Icon
-                      type={themeMenuOpen ? "ARROW_UP" : "ARROW_DOWN"}
-                      color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
-                      width={24}
-                      height={24}
-                    ></Icon>
+                    <div className={`${prefixCls}-content-item-dropdown`}>
+                      <div>{i18next.t(generalConfig.theme)}</div>
+                      <Icon
+                        type={themeMenuOpen ? "ARROW_UP" : "ARROW_DOWN"}
+                        color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                        width={24}
+                        height={24}
+                      ></Icon>
+                    </div>
                   </Tooltip>
                 </div>
               </div>
@@ -251,7 +270,7 @@ const General = () => {
 
                 <Icon
                   type={colorSettingVisible ? "ARROW_UP" : "ARROW_DOWN"}
-                  color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                  color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
                   width={24}
                   height={24}
                 ></Icon>
@@ -288,7 +307,7 @@ const General = () => {
                 <span>{i18next.t("featuresConsole")}</span>
                 <Icon
                   type={featureSettingVisible ? "ARROW_UP" : "ARROW_DOWN"}
-                  color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                  color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
                   width={24}
                   height={24}
                 ></Icon>
@@ -370,23 +389,25 @@ const General = () => {
               >
                 <span>{i18next.t("languageSettings")}</span>
                 <div>
-                  <div>{i18next.t(generalConfig.language)}</div>
                   <Tooltip
                     title={langMenu}
                     trigger="click"
-                    placement="bottom"
+                    placement="bottomLeft"
                     open={langMenuOpen}
                     onOpenChange={(value: boolean) => {
                       setLangMenuOpen(value);
                     }}
                   >
-                    <Icon
-                      style={{ cursor: "pointer" }}
-                      type={langMenuOpen ? "ARROW_UP" : "ARROW_DOWN"}
-                      color={themeMode == "dark" ? "#C8CDD0" : "#464E53"}
-                      width={24}
-                      height={24}
-                    ></Icon>
+                    <div className={`${prefixCls}-content-item-dropdown`}>
+                      <div>{i18next.t(generalConfig.language)}</div>
+                      <Icon
+                        style={{ cursor: "pointer" }}
+                        type={langMenuOpen ? "ARROW_UP" : "ARROW_DOWN"}
+                        color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                        width={24}
+                        height={24}
+                      ></Icon>
+                    </div>
                   </Tooltip>
                 </div>
               </div>

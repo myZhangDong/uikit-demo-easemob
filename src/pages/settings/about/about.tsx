@@ -19,19 +19,28 @@ const About = () => {
         <section className="setting-personal-content">
           <div className="user-info-content">
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("demoVersion")}</span>
                 <div>1.0.0</div>
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("uikitVersion")}</span>
                 <div>1.0.0</div>
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("officialWebsite")}</span>
                 <div>
                   <a
@@ -45,7 +54,10 @@ const About = () => {
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("hotline")}</span>
                 <div>
                   <a href="tel:4006221776"></a>400-622-1776
@@ -53,7 +65,10 @@ const About = () => {
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("businessDevelopment")}</span>
                 <div>
                   <a href="mailto:bd@easemob.com">bd@easemob.com</a>
@@ -61,7 +76,10 @@ const About = () => {
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("channelCooperation")}</span>
                 <div>
                   <a href="mailto:qudao@easemob.com">qudao@easemob.com</a>
@@ -69,7 +87,10 @@ const About = () => {
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
-              <div className={`${prefixCls}-content-item-box`}>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                style={{ cursor: "default" }}
+              >
                 <span>{i18next.t("issues")}</span>
                 <div>
                   <a href="mailto:issues@easemob.com">issues@easemob.com</a>

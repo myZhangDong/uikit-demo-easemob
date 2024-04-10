@@ -8,8 +8,8 @@ import React, {
 import i18next from "../../i18n";
 import loading from "../../assets/loading.png";
 import closeIcon from "../../assets/Xmark@2x.png";
-import { Icon } from "easemob-chat-uikit";
-import toast from "react-hot-toast";
+import { Icon, Checkbox } from "easemob-chat-uikit";
+import toast from "../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import { sendSms, getChatToken } from "../../service/login";
 import { loginWithToken, setSDKConfig } from "../../store/loginSlice";
@@ -17,6 +17,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { updateAppConfig } from "../../store/appConfigSlice";
 import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION, appKey } from "../../config";
+
 const Login = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.login);
@@ -123,13 +124,13 @@ const Login = () => {
   };
   const login = () => {
     if (!agree) {
-      toast.error(i18next.t("Please agree to privacy and policies"));
+      toast.info(i18next.t("Please agree to privacy and policies"));
       return;
     } else if (values.phoneNumber.length !== 11) {
-      toast.error(i18next.t("Please enter the correct phone number"));
+      toast.info(i18next.t("Please enter the correct phone number"));
       return;
     } else if (values.vCode.length !== 6) {
-      toast.error(i18next.t("Please enter the correct verification code"));
+      toast.info(i18next.t("Please enter the correct verification code"));
       return;
     }
 
@@ -252,13 +253,20 @@ const Login = () => {
           )}
         </div>
         <div className="login-form-agreement">
-          <input
+          {/* <input
             disabled={isLogging}
             checked={agree}
             type="checkbox"
             onChange={handleAgreeChange}
             className="login-form-checkbox"
-          ></input>
+          ></input> */}
+          <Checkbox
+            className="login-form-checkbox"
+            disabled={isLogging}
+            checked={agree}
+            onChange={handleAgreeChange}
+            shape="square"
+          />
           <div>
             {i18next.t("agree")}{" "}
             <span

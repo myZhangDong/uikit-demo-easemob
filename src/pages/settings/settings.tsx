@@ -56,7 +56,7 @@ const Settings = () => {
             ],
           },
           {
-            title: i18next.t("logins"),
+            title: i18next.t("account"),
             key: "login",
             tabs: [
               {

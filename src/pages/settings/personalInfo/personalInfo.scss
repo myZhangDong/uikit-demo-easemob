@@ -20,7 +20,7 @@
         flex: 1;
         display: flex;
         justify-content: center;
-        
+        overflow-y: auto;
         .setting-personal-content{
             width: 360px;
             // border: 1px solid #E3E6E8;
@@ -29,6 +29,7 @@
             flex-direction: column;
             gap: 36px;
         }
+        scrollbar-color: hsl(203deg, 8%, 80%) transparent;
     }
 }
 
@@ -69,6 +70,7 @@
                         }
                     }
                 }
+                scrollbar-color: hsl(203deg, 8%, 40%) transparent;
             }
         }
     }

@@ -18,6 +18,8 @@ const CreateChat = (props: CreateChatProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current?.focus?.();
+    //@ts-ignore
+    handleChange({ target: { value: "" } });
   }, []);
 
   const contacts = rootStore.addressStore.contacts;
@@ -31,7 +33,7 @@ const CreateChat = (props: CreateChatProps) => {
     if (e.target.value.length > 0) {
       setShowSearch(true);
     } else {
-      setShowSearch(false);
+      //setShowSearch(false);
     }
     const searched = contacts.filter((contact) => {
       if (contact.remark) {
@@ -52,7 +54,7 @@ const CreateChat = (props: CreateChatProps) => {
     silent?: boolean;
   }>();
 
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(true);
 
   const context = useContext(RootContext);
   const { theme } = context;
@@ -65,7 +67,9 @@ const CreateChat = (props: CreateChatProps) => {
       })}
     >
       <header>
-        <span>{i18next.t("newConversation")}:</span>
+        <span style={{ marginRight: "8px" }}>
+          {i18next.t("newConversation")}
+        </span>
 
         <Input
           ref={inputRef}
@@ -75,7 +79,12 @@ const CreateChat = (props: CreateChatProps) => {
           }}
           onBlur={() => {
             console.log("showSearch", showSearch);
-            !showSearch && onClosed?.();
+            setTimeout(() => {
+              setShowSearch(false);
+              onClosed?.();
+            }, 500);
+
+            // !showSearch && onClosed?.();
           }}
         />
       </header>
@@ -99,13 +108,15 @@ const CreateChat = (props: CreateChatProps) => {
                     rootStore.conversationStore.addConversation({
                       chatType: "singleChat",
                       conversationId: contact.userId,
-                      name: contact.remark || contact.nickname || contact.userId,
+                      name:
+                        contact.remark || contact.nickname || contact.userId,
                       lastMessage: {} as never,
                       unreadCount: 0,
                     });
                     rootStore.conversationStore.setCurrentCvs({
                       chatType: "singleChat",
-                      name: contact.remark || contact.nickname || contact.userId,
+                      name:
+                        contact.remark || contact.nickname || contact.userId,
                       conversationId: contact.userId,
                       unreadCount: 0,
                     });

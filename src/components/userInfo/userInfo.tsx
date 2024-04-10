@@ -47,13 +47,6 @@ const UserInfo = (props: UserInfoProps) => {
 
   const { t } = i18next;
 
-  const componentsShape = "square";
-  const avatarUrl = "https://img.yzcdn.cn/vant/cat.jpeg";
-  const infoData = {
-    id: "userid12",
-    name: "name22",
-  };
-
   const classString = classNames(
     prefixCls,
     {
@@ -127,7 +120,7 @@ const UserInfo = (props: UserInfoProps) => {
             addressStore.appUsersInfo[conversation.conversationId]?.avatarurl
           }
           size={100}
-          shape={componentsShape}
+          shape={theme?.avatarShape}
         >
           {addressStore.appUsersInfo[conversation.conversationId]?.nickname ||
             conversation.conversationId}
@@ -193,7 +186,7 @@ const UserInfo = (props: UserInfoProps) => {
         <div className={`${prefixCls}-content-section`}>
           <div className={`${prefixCls}-content-item`}>
             <Icon
-              type={"ARROW_RIGHT_SQUARE_FILL"}
+              type={"PERSON_MINUS_FILL"}
               width={24}
               height={24}
               style={{ fill: "#FF002B", width: "24px", height: "24px" }}
@@ -204,7 +197,9 @@ const UserInfo = (props: UserInfoProps) => {
                 setDeleteContactModalVisible(true);
               }}
             >
-              <span style={{ color: "#FF002B" }}>{t("deleteContact")}</span>
+              <span style={{ color: "#FF002B" }}>
+                {t("deleteContactTitle")}
+              </span>
             </div>
           </div>
         </div>
@@ -218,6 +213,7 @@ const UserInfo = (props: UserInfoProps) => {
         onOk={editRemark}
         title={t("contactRemark")}
         wrapClassName="modify-message-modal"
+        okText={t("done")}
       >
         <Input
           className="cui-group-nickname-input"
@@ -239,7 +235,7 @@ const UserInfo = (props: UserInfoProps) => {
       </Modal>
 
       <Modal
-        title={t("deleteContact")}
+        title={t("deleteContactTitle")}
         open={deleteContactModalVisible}
         onCancel={() => {
           setDeleteContactModalVisible(false);

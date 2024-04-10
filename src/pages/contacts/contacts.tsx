@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { ContactList, ContactDetail } from "easemob-chat-uikit";
+import {
+  ContactList,
+  ContactDetail,
+  Header,
+  Icon,
+  Modal,
+  Input,
+  rootStore,
+} from "easemob-chat-uikit";
 import "./contacts.scss";
 import toast from "../../components/toast/toast";
 import i18next from "../../i18n";
@@ -19,10 +27,35 @@ const Contacts = ({
     type: "contact",
   });
 
+  const [addContactVisible, setAddContactVisible] = useState(false);
+
+  const [userId, setUserId] = useState("");
+  const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setUserId(e.target.value);
+  };
   return (
     <div className="contacts-container">
       <div className="contacts-container-list">
         <ContactList
+          header={
+            <Header
+              avatar={<></>}
+              content={i18next.t("contacts")}
+              suffixIcon={
+                <div title={i18next.t("addContact")}>
+                  <Icon
+                    type="PERSON_ADD"
+                    width={24}
+                    height={24}
+                    onClick={() => {
+                      setAddContactVisible(true);
+                    }}
+                  ></Icon>
+                </div>
+              }
+            ></Header>
+          }
           // className="conversation"
           onItemClick={(data) => {
             let type = data.type;
@@ -58,6 +91,31 @@ const Contacts = ({
           }}
         ></ContactDetail>
       </div>
+
+      {/** 添加联系人弹窗 */}
+      <Modal
+        open={addContactVisible}
+        onCancel={() => {
+          setAddContactVisible(false);
+        }}
+        onOk={() => {
+          rootStore.addressStore.addContact(userId);
+          setAddContactVisible(false);
+        }}
+        okText={i18next.t("add")}
+        closable={false}
+        title={i18next.t("addContact")}
+      >
+        <>
+          <div className="add-contact">
+            <Input
+              placeholder={i18next.t("enterUserID")}
+              className="add-contact-input"
+              onChange={handleUserIdChange}
+            ></Input>
+          </div>
+        </>
+      </Modal>
     </div>
   );
 };

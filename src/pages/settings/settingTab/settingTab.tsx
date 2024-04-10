@@ -3,7 +3,8 @@ import "./settingTab.scss";
 import classNames from "classnames";
 import i18next from "../../../i18n";
 import { RootContext } from "easemob-chat-uikit";
-
+import { use } from "i18next";
+import { useAppSelector, useAppDispatch } from "../../../hooks";
 interface Tab {
   title: React.ReactNode;
   icon: React.ReactNode;
@@ -34,7 +35,7 @@ const SettingTab = (props: SettingMenuProps) => {
   const { theme } = context;
   console.log("theme >>>", context);
   const themeMode = theme?.mode;
-
+  const state = useAppSelector((state) => state.appConfig);
   return (
     <div
       className={classNames("setting-tab", {
@@ -42,7 +43,7 @@ const SettingTab = (props: SettingMenuProps) => {
       })}
     >
       <div className="setting-tab-menu">
-        <div className="setting-tab-menu-header">{i18next.t("settings")}</div>
+        <div className="setting-tab-menu-header">{i18next.t("me")}</div>
 
         {tabGroups.map((group, index) => {
           return (

@@ -14,16 +14,14 @@ export const uploadImage = (formData: FormData) => {
       }
     )
     .then((response) => {
-      console.log("上传成功", response.data);
       return rootStore.client
         .updateOwnUserInfo("avatarurl", response.data.avatarUrl)
         .then((res: any) => {
-          console.log("更新用户属性成功", res);
           return response.data.avatarUrl;
         });
     })
     .catch((error) => {
-      console.error("上传失败", error);
+      console.error("uploadImage fail", error);
     });
 };
 
@@ -35,7 +33,6 @@ async function sendRequest(groupId: string) {
       `https://a1-appserver.easemob.com/inside/app/group/${groupId}/avatarurl`
     )
     .then((response) => {
-      console.log("获取成功", response);
       return response.data.avatarUrl;
     })
     .catch(() => {

@@ -47,7 +47,6 @@ export const notification = (iconTitle: string, params: any, store: any) => {
   const config = { ...options, ...params };
   if (Notification?.permission === "granted") {
     const state = store.getState();
-    console.log("state >>>", state);
     const appConfig = state.appConfig;
     if (!appConfig.notification) return;
     const { chatType, from, to, ext } = params;
@@ -79,7 +78,6 @@ export const notification = (iconTitle: string, params: any, store: any) => {
     var notification = new Notification(config.title || "New Message", config);
     const session = {};
     notification.onclick = (res: any) => {
-      console.log("点击 >>>", res, bodyList);
       //   bodyList[1]?.split("&")?.forEach((item: any) => {
       //     const [first, second] = item?.split("=");
       //     console.log("first", first, "second", second);

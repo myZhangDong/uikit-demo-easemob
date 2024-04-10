@@ -80,3 +80,16 @@ body{
 .cui-conversationItem-content{
   width: 100%;
 }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* 隐藏滚动条轨道 */
+  ::-webkit-scrollbar-track {
+    border: none;
+    background-color: transparent;
+  }
+  
+  /* 略微调整滚动条宽度 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+}

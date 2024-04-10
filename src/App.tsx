@@ -24,8 +24,6 @@ const ChatApp: FC<any> = () => {
     listener(store);
   }, [loginState.appKey, loginState.useDNS]);
 
-  console.log("111111", state);
-
   const [config, setConfig] = useState({
     conversationList: {
       search: true,

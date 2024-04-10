@@ -2,8 +2,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { ReactElement } from "react";
 import { Icon } from "easemob-chat-uikit";
 export { Toaster };
-const customToast = toast;
-// @ts-ignore
+const customToast: any = toast;
+
 customToast.success = (message: string, options = {}) => {
   // @ts-ignore
   const { theme = "light" } = options;
@@ -44,7 +44,6 @@ customToast.success = (message: string, options = {}) => {
   });
 };
 
-// @ts-ignore
 customToast.info = (message: string, options = {}) => {
   // @ts-ignore
   const { theme = "light" } = options;
@@ -84,7 +83,6 @@ customToast.info = (message: string, options = {}) => {
   });
 };
 
-// @ts-ignore
 customToast.error = (message: string, options = {}) => {
   // @ts-ignore
   const { theme = "light" } = options;
