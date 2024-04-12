@@ -42,8 +42,6 @@ import { useAppSelector, useAppDispatch } from "../../hooks";
 import CreateChat from "./createChat";
 import classNames from "classnames";
 import i18next from "../../i18n";
-import { current } from "@reduxjs/toolkit";
-import { set } from "mobx";
 const ChatContainer = forwardRef((props, ref) => {
   const appConfig = useAppSelector((state) => state.appConfig);
   const [userSelectVisible, setUserSelectVisible] = useState(false); // 是否显示创建群组弹窗
@@ -52,8 +50,10 @@ const ChatContainer = forwardRef((props, ref) => {
     useState(false); //是否显示群组设置/联系人详情弹窗
   const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
   const [cvsItem, setCvsItem] = useState<any>([]);
-  const [combineMsg, setCombineMsg] = useState({});
-  const [forwardVisible, setForwardVisible] = useState(false); // 是否显示单条消息转发弹窗
+  const [forwardedMessages, setForwardedMessages] = useState<
+    Record<string, any>
+  >({});
+  const [contactListVisible, setContactListVisible] = useState(false); // 是否显示单条消息转发弹窗
   const [userInviteModalVisible, setUserInviteModalVisible] = useState(false); // 是否显示音视频邀请人员弹窗
   const [agoraUuId, setAgoraUuId] = useState<string>(""); // 当前用户的音视频时的agoraUid
   const [joinedRtcRoomUsers, setJoinedRtcRoomUsers] = useState<
@@ -149,6 +149,7 @@ const ChatContainer = forwardRef((props, ref) => {
   }));
 
   useEffect(() => {
+    // 获取群组头像
     if (rootStore.loginState) {
       const groupIds =
         rootStore.addressStore.groups
@@ -180,6 +181,8 @@ const ChatContainer = forwardRef((props, ref) => {
       setGroupAvatar(groupAvatarUrl || "");
     }
   }, [rootStore.conversationStore.currentCvs]);
+
+  console.log("appConfig ---", appConfig);
 
   return (
     <div
@@ -250,9 +253,7 @@ const ChatContainer = forwardRef((props, ref) => {
                   placement: "bottomRight",
                 },
               }}
-              content={
-                <div className="header-content">{i18next.t("chats")}</div>
-              }
+              content={<div className="header-content">Chats</div>}
               avatar={<></>}
             ></Header>
           )}
@@ -271,6 +272,7 @@ const ChatContainer = forwardRef((props, ref) => {
             flex: 1,
             borderLeft: "1px solid transparent",
             overflow: "hidden",
+            transition: "all 0.5s ease",
           }}
         >
           {createChatVisible && (
@@ -281,6 +283,12 @@ const ChatContainer = forwardRef((props, ref) => {
             />
           )}
           <Chat
+            // MessageList 使用mome缓存了消息组件，修改这些控制显示开关时需要重新渲染组件
+            key={
+              appConfig.reaction.toString() +
+              appConfig.thread.toString() +
+              appConfig.translation.toString()
+            }
             ref={chatRef}
             onOpenThread={() => {
               if (conversationDetailVisible) {
@@ -292,14 +300,11 @@ const ChatContainer = forwardRef((props, ref) => {
                 return null;
               },
               messageProps: {
-                // @ts-ignore
+                // 单条转发
                 onForwardMessage: (msg: any) => {
                   let forwardMsg = { ...msg };
-                  // @ts-ignore
                   forwardMsg.id = Date.now() + "";
-                  // @ts-ignore
                   forwardMsg.from = rootStore.client.user;
-                  // @ts-ignore
                   forwardMsg.ext = {
                     ease_chat_uikit_user_info: {
                       nickname:
@@ -312,15 +317,13 @@ const ChatContainer = forwardRef((props, ref) => {
                         ].avatarurl,
                     },
                   };
-                  // @ts-ignore
                   forwardMsg.reactions = undefined;
-                  // @ts-ignore
                   forwardMsg.isChatThread = false;
                   forwardMsg.chatThreadOverview = undefined;
                   forwardMsg.chatThread = undefined;
-                  console.log("onForwardMessage --", forwardMsg);
-                  setCombineMsg(forwardMsg);
-                  setForwardVisible(true);
+                  // 复用合并转发的逻辑
+                  setForwardedMessages(forwardMsg);
+                  setContactListVisible(true);
                 },
                 reaction: appConfig.reaction,
                 thread: appConfig.thread,
@@ -368,19 +371,18 @@ const ChatContainer = forwardRef((props, ref) => {
             messageInputProps={{
               enabledTyping: true,
               onSendMessage: (msg) => {
+                // 发送消息回调，如果是合并转发的消息，显示转发弹窗
                 if (msg.type == "combine") {
-                  setCombineMsg(msg);
-                  setForwardVisible(true);
+                  setForwardedMessages(msg);
+                  setContactListVisible(true);
                 }
               },
             }}
             headerProps={{
               moreAction: {
+                // 关闭默认行为，自定义更多操作
                 visible: true,
                 actions: [],
-                tooltipProps: {
-                  placement: "bottomRight",
-                },
               },
               onClickEllipsis: handleEllipsisClick,
             }}
@@ -435,11 +437,11 @@ const ChatContainer = forwardRef((props, ref) => {
                       setConversationDetailVisible(false);
                     },
                     onAddContact: () => {
-                      toast.success("已发送申请");
+                      toast.success("Friend request sent");
                     },
                   }}
                   onUserIdCopied={() => {
-                    toast.success("已复制");
+                    toast.success(i18next.t("copied"));
                   }}
                 ></GroupDetail>
               ) : (
@@ -482,8 +484,8 @@ const ChatContainer = forwardRef((props, ref) => {
                     forwardMsg.isChatThread = false;
                     forwardMsg.chatThreadOverview = undefined;
                     forwardMsg.chatThread = undefined;
-                    setCombineMsg(forwardMsg);
-                    setForwardVisible(true);
+                    setForwardedMessages(forwardMsg);
+                    setContactListVisible(true);
                   },
                   customAction: {
                     visible: true,
@@ -518,8 +520,8 @@ const ChatContainer = forwardRef((props, ref) => {
                 onSendMessage: (msg: any) => {
                   console.log("message", msg);
                   if (msg.type == "combine") {
-                    setCombineMsg(msg);
-                    setForwardVisible(true);
+                    setForwardedMessages(msg);
+                    setContactListVisible(true);
                   }
                 },
                 // enabledTyping: state?.typingSwitch,
@@ -548,10 +550,10 @@ const ChatContainer = forwardRef((props, ref) => {
       ></UserSelect>
       {/** 转发消息的联系人弹窗 */}
       <Modal
-        open={forwardVisible}
+        open={contactListVisible}
         closable={false}
         onCancel={() => {
-          setForwardVisible(false);
+          setContactListVisible(false);
         }}
         bodyStyle={{ padding: 0 }}
         footer={null}
@@ -562,21 +564,12 @@ const ChatContainer = forwardRef((props, ref) => {
             menu={["groups", "contacts"]}
             header={<></>}
             onItemClick={(data) => {
-              // @ts-ignore
-              combineMsg.to = data.id;
-              // @ts-ignore
-              combineMsg.chatType =
+              forwardedMessages.to = data.id;
+              forwardedMessages.chatType =
                 data.type == "contact" ? "singleChat" : "groupChat";
-              console.log("combineMsg ---", combineMsg);
-              rootStore.messageStore.sendMessage(combineMsg);
-              setForwardVisible(false);
+              rootStore.messageStore.sendMessage(forwardedMessages);
+              setContactListVisible(false);
 
-              // rootStore.conversationStore.topConversation({
-              //   chatType: data.type == "contact" ? "singleChat" : "groupChat",
-              //   conversationId: data.id,
-              //   //@ts-ignore
-              //   lastMessage: combineMsg,
-              // })
               rootStore.messageStore.setSelectedMessage(cvsItem, {
                 selectable: false,
                 selectedMessage: [],
@@ -585,7 +578,7 @@ const ChatContainer = forwardRef((props, ref) => {
                 chatType: data.type == "contact" ? "singleChat" : "groupChat",
                 conversationId: data.id,
                 //@ts-ignore
-                lastMessage: combineMsg,
+                lastMessage: forwardedMessages,
               });
             }}
           ></ContactList>

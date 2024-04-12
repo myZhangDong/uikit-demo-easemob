@@ -130,7 +130,7 @@ const UserInfo = (props: UserInfoProps) => {
             {addressStore.appUsersInfo[conversation.conversationId]?.nickname}
           </div>
           <div className={`${prefixCls}-header-id`}>
-            <div>{t("easemob")} ID:</div>
+            <div>{t("enterUserID")}:</div>
             {conversation?.conversationId}
             <Icon
               type="DOC_ON_DOC"

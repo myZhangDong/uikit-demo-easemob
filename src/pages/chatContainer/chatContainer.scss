@@ -22,10 +22,11 @@
         overflow: hidden;
         display: flex;
         position: relative;
-
+        background-color: #F9FAFA;
         &-right{
             width: 350px;
             border-left: 1px solid #E3E6E8;
+            background-color: #F9FAFA;
         }
     }
 }
@@ -37,9 +38,12 @@
     .conversation-list{
         background-color: #2F3437;
     }
-
+    .chat-container-chat{
+        background-color: #171A1C;
+    }
     .chat-container-chat-right{
         border-left: 1px solid #2F3437;
+        background-color: #171A1C;
     }
 }
 
