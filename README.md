@@ -1,46 +1,45 @@
-# Getting Started with Create React App
+## 产品介绍
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+环信 IM 产品展示了怎么使用环信 `easemob-chat-uikit` 创建一个完整的聊天 APP。展示的功能包括：用户登录注册，添加好友，单聊，群聊，发送文字，表情，语音，图片，文件等消息，以及实时音视频通话等。
 
-## Available Scripts
+其中音视频通话使用声网 `chat-callkit` 实现。
 
-In the project directory, you can run:
+## 产品体验
 
-### `npm start`
+[demo](./demo.png)
+https://uikit-demo.oss-cn-beijing.aliyuncs.com/login
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 前置依赖
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1.[注册环信应用](https://doc.easemob.com/product/enable_and_configure_IM.html)
 
-### `npm test`
+2. 示例项目中登录，上传头像，获取群组头像，音视频功能依赖的 app server 来实现，所以你需要参考 app server 示例代码来实现自己的 app server，需要确保 app server 中使用的 appKey 和本项目中配置的是相同的。
+   // TODO 链接
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 跑通项目
 
-### `npm run build`
+1. 配置项目
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+创建 .env.config.ts 文件放入 src 目录下，配置自己的 AppKey, AppId, AppServer
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```typescript
+export AppKey = 'you AppKey';
+export AppId = 'your AppId'
+export AppServer = 'https://example.com/'
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. 安装依赖
 
-### `npm run eject`
+```
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. 启动项目
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Q&A
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+如有问题请联系环信技术支持或者提 issues
