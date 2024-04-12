@@ -6,8 +6,9 @@
 
 ## 产品体验
 
-[demo](./demo.png)
-https://uikit-demo.oss-cn-beijing.aliyuncs.com/login
+![demo](./demo.png)
+
+[项目线上地址](https://uikit-demo.oss-cn-beijing.aliyuncs.com/login)
 
 ## 前置依赖
 
