@@ -52,7 +52,7 @@ const listener = (store: any) => {
     },
     addContact: {
       success: () => {
-        toast.success(i18next.t("Request sent"));
+        toast.success(i18next.t("Friend request sent"));
       },
       error: (error) => {
         if (

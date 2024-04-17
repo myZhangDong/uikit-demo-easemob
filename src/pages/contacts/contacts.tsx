@@ -43,7 +43,10 @@ const Contacts = ({
               avatar={<></>}
               content={i18next.t("contacts")}
               suffixIcon={
-                <div title={i18next.t("addContact")}>
+                <div
+                  title={i18next.t("addContact")}
+                  style={{ cursor: "pointer" }}
+                >
                   <Icon
                     type="PERSON_ADD"
                     width={24}

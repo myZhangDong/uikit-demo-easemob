@@ -436,9 +436,9 @@ const ChatContainer = forwardRef((props, ref) => {
                     onPrivateChat: () => {
                       setConversationDetailVisible(false);
                     },
-                    onAddContact: () => {
-                      toast.success("Friend request sent");
-                    },
+                    // onAddContact: () => {
+                    //   toast.success("Friend request sent");
+                    // },
                   }}
                   onUserIdCopied={() => {
                     toast.success(i18next.t("copied"));

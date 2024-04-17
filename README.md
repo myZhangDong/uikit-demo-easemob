@@ -12,7 +12,7 @@
 
 ## 前置依赖
 
-1.[注册环信应用](https://doc.easemob.com/product/enable_and_configure_IM.html)
+1. [注册环信应用](https://doc.easemob.com/product/enable_and_configure_IM.html)
 
 2. 示例项目中登录，上传头像，获取群组头像，音视频功能依赖的 app server 来实现，所以你需要参考 app server 示例代码来实现自己的 app server，需要确保 app server 中使用的 appKey 和本项目中配置的是相同的。
    // TODO 链接
@@ -40,6 +40,8 @@ npm install
 ```
 npm start
 ```
+
+## 项目结构
 
 ## Q&A
 

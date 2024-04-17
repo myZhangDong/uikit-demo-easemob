@@ -4149,10 +4149,10 @@ duplexer@^0.1.2:
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-easemob-chat-uikit@^1.1.0-beta2:
-  version "1.1.0-beta2"
-  resolved "https://registry.npmjs.org/easemob-chat-uikit/-/easemob-chat-uikit-1.1.0-beta2.tgz"
-  integrity sha512-48qNJLWOds11fo5Kmfa7AReCUogflze/FFv8mxYxp3elKo1mtpHIaXmlzxFcHQZEWSNf7uecbGQ34jcFgr1PYA==
+easemob-chat-uikit@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/easemob-chat-uikit/-/easemob-chat-uikit-1.2.0.tgz#6a2c8231ecad63dd55f4bece10252b0d571b3359"
+  integrity sha512-cA4259XditbqbEVYFcM+17VyrPTYQ7bzZQ0nB+tFILgv7XVxFSPI8MM7RwOlyB2DAMzntPwT1uYhGp+GTdJOcw==
 
 ee-first@1.1.1:
   version "1.1.1"
