@@ -1,4 +1,4 @@
-import "./login.scss";
+import "./register.scss";
 import React, {
   ChangeEvent,
   ChangeEventHandler,
@@ -11,14 +11,14 @@ import closeIcon from "../../assets/Xmark@2x.png";
 import { Icon, Checkbox } from "easemob-chat-uikit";
 import toast from "../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
-import { sendSms, getChatToken, getToken } from "../../service/login";
+import { sendSms, getChatToken, getToken, signUp } from "../../service/login";
 import { loginWithToken, setSDKConfig } from "../../store/loginSlice";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { updateAppConfig } from "../../store/appConfigSlice";
 import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION, appKey } from "../../config";
 
-const Login = () => {
+const Register = () => {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.login);
   const appConfigState = useAppSelector((state) => state.appConfig);
@@ -139,16 +139,21 @@ const Login = () => {
     // }
 
     setIsLogging(true);
-    getToken(values.phoneNumber, values.vCode)
+    signUp(values.phoneNumber, values.vCode)
       .then((res) => {
         console.log("res", res);
         const { chatUserName, accessToken } = res.data;
-
-        dispatch(
-          loginWithToken({ userId: chatUserName, chatToken: accessToken })
-        );
+        toast.success("Registration successful, go to log in.");
+        // dispatch(
+        //   loginWithToken({ userId: chatUserName, chatToken: accessToken })
+        // );
+        setIsLogging(false);
+        setTimeout(() => {
+          goLogin();
+        }, 1500);
       })
       .catch(function (error) {
+        toast.error("Sign Up Fail.");
         switch (error.response?.data?.errorInfo) {
           case "UserId password error.":
             toast.error(i18next.t("Incorrect username or password"));
@@ -218,8 +223,8 @@ const Login = () => {
     navigate("/dev", { replace: true });
   };
 
-  const goRegister = () => {
-    navigate("/register", { replace: true });
+  const goLogin = () => {
+    navigate("/login", { replace: true });
   };
 
   const changeLang = () => {
@@ -290,7 +295,7 @@ const Login = () => {
             disabled={false}
             type="button"
             className="login-form-input login-button"
-            value={isLogging ? "" : i18next.t("login")}
+            value={isLogging ? "" : i18next.t("Sign Up")}
             onClick={login}
           ></input>
           {isLogging && (
@@ -298,9 +303,8 @@ const Login = () => {
           )}
         </div>
         <div className="login-form-agreement">
-          No account?{" "}
-          <span onClick={goRegister} style={{ color: "#009eff" }}>
-            Go register
+          <span onClick={goLogin} style={{ color: "#009eff" }}>
+            Back to login
           </span>
           {/* <input
             disabled={isLogging}
@@ -347,4 +351,4 @@ const Login = () => {
 // console.log(i18n.t(`I have ${count} ${fruit}`));
 // 2024 Easemob Inc, SDK Version: 4.1.1  UIkit Version: Beta0.1.1  Demo Version: 2.0.0
 // Privacy and Policy
-export default Login;
+export default Register;

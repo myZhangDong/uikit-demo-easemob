@@ -15,7 +15,7 @@ i18n
             en,
             zh
         },
-        lng: window.navigator.language,
+        lng: 'en',// window.navigator.language,
         fallbackLng: 'zh',
 
         interpolation: {

@@ -30,7 +30,7 @@ export const loginSlice = createSlice({
       console.log("loginWithToken", action.payload);
       client.open({
         user: action.payload.userId,
-        accessToken: action.payload.chatToken,
+        agoraToken: action.payload.chatToken,
       });
       //设置 userId
       state.userId = action.payload.userId;

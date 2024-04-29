@@ -10,6 +10,7 @@ import Login from "../pages/login/login";
 // import Dev from "../pages/dev";
 import ChatApp from "../pages/main/main";
 import AuthCheck from "./authCheck";
+const Register = React.lazy(() => import("../pages/register/register"));
 const Dev = React.lazy(() => import("../pages/dev"));
 
 const AppRoutes = () => {
@@ -26,6 +27,14 @@ const AppRoutes = () => {
             </React.Suspense>
           }
         />
+        <Route
+          path="register"
+          element={
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <Register></Register>
+            </React.Suspense>
+          }
+        ></Route>
         <Route
           path="/main"
           element={

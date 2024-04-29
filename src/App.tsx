@@ -109,7 +109,7 @@ const ChatApp: FC<any> = () => {
         restUrl: serverConfig.rest,
         msyncUrl: serverConfig.msync,
         useUserInfo: true,
-        translationTargetLanguage: window.navigator.language,
+        translationTargetLanguage: 'en', //window.navigator.language,
       }}
       features={config}
       theme={{

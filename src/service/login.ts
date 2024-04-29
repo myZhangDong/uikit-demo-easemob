@@ -27,3 +27,18 @@ export const getChatToken = (phoneNumber: string, VCode: string) => {
   //     dispatch(Creators.loginByToken(chatUserName, token))
   // })
 };
+
+export const getToken = (agoraId: string, password: string) => {
+  return axios.post("https://a41.chat.agora.io/app/chat/user/login", {
+    userAccount: agoraId,
+    userPassword: password,
+  });
+  // return postData('https://a41.chat.agora.io/app/chat/user/login', { "userAccount": agoraId, "userPassword": password })
+};
+export const signUp = (agoraId: string, password: string) => {
+  return axios.post("https://a41.chat.agora.io/app/chat/user/register", {
+    userAccount: agoraId,
+    userPassword: password,
+  });
+  // return postData('https://a41.chat.agora.io/app/chat/user/register', { "userAccount": agoraId, "userPassword": password })
+};

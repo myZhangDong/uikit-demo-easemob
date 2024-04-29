@@ -182,27 +182,28 @@ const UserInfo = (props: UserInfoProps) => {
             <span>{t("clearChatHistory")}</span>
           </div>
         </div>
-
-        <div className={`${prefixCls}-content-section`}>
-          <div className={`${prefixCls}-content-item`}>
-            <Icon
-              type={"PERSON_MINUS_FILL"}
-              width={24}
-              height={24}
-              style={{ fill: "#FF002B", width: "24px", height: "24px" }}
-            ></Icon>
-            <div
-              className={`${prefixCls}-content-item-box`}
-              onClick={() => {
-                setDeleteContactModalVisible(true);
-              }}
-            >
-              <span style={{ color: "#FF002B" }}>
-                {t("deleteContactTitle")}
-              </span>
+        {conversation?.conversationId?.indexOf("chatbot_") === -1 && (
+          <div className={`${prefixCls}-content-section`}>
+            <div className={`${prefixCls}-content-item`}>
+              <Icon
+                type={"PERSON_MINUS_FILL"}
+                width={24}
+                height={24}
+                style={{ fill: "#FF002B", width: "24px", height: "24px" }}
+              ></Icon>
+              <div
+                className={`${prefixCls}-content-item-box`}
+                onClick={() => {
+                  setDeleteContactModalVisible(true);
+                }}
+              >
+                <span style={{ color: "#FF002B" }}>
+                  {t("deleteContactTitle")}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <Modal
