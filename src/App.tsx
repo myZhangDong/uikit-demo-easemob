@@ -2,7 +2,7 @@ import { useEffect, useState, FC } from "react";
 import "./index.css";
 import { observer } from "mobx-react-lite";
 import { Toaster } from "react-hot-toast";
-import { rootStore, Provider } from "easemob-chat-uikit";
+import { rootStore, Provider, UIKitProvider } from "easemob-chat-uikit";
 import "easemob-chat-uikit/style.css";
 import "./App.css";
 import AppRoutes from "./routes/routes";
@@ -102,7 +102,7 @@ const ChatApp: FC<any> = () => {
   const serverConfig = JSON.parse(localStorage.getItem("serverConfig") || "{}");
   console.log("app", loginState.useDNS, serverConfig);
   return (
-    <Provider
+    <UIKitProvider
       initConfig={{
         appKey: loginState.appKey,
         isHttpDNS: loginState.useDNS,
@@ -125,7 +125,7 @@ const ChatApp: FC<any> = () => {
     >
       <AppRoutes></AppRoutes>
       <Toaster></Toaster>
-    </Provider>
+    </UIKitProvider>
   );
 };
 
