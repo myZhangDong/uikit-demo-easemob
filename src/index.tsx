@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "easemob-chat-uikit";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./store/store";
+import * as serviceWorker from "./registerServiceWorker";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <div>
@@ -14,3 +15,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </ReduxProvider>
   </div>
 );
+serviceWorker.unregister();
