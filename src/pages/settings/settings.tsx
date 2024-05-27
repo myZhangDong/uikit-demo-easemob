@@ -81,6 +81,8 @@ const Settings = () => {
       ></SettingTab>
       <Modal
         open={logoutModalOpen}
+        okText={i18next.t("confirm")}
+        cancelText={i18next.t("cancel")}
         onCancel={() => {
           setLogoutModalOpen(false);
         }}
