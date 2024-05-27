@@ -36,11 +36,11 @@ export const checkBrowerNotifyStatus = (
       if (e === "granted" && showFlag) {
         notification(params, iconTitle, store);
       } else if (e !== "granted") {
-        alert("Please set browser support notification");
+        alert("Please allow the browser to send notifications");
       }
     });
   } else if (Notification.permission === "denied") {
-    alert("Please set browser support notification");
+    alert("Please allow the browser to send notifications");
   }
 };
 export const notification = (iconTitle: string, params: any, store: any) => {
