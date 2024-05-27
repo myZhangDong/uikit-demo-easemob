@@ -14,3 +14,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </ReduxProvider>
   </div>
 );
+
+serviceWorker.register();
+
