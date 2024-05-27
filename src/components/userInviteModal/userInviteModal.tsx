@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
   Modal,
+  // @ts-ignore
   UserSelect,
+  // @ts-ignore
   rootStore,
+  // @ts-ignore
   useAddressContext,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import toast from "react-hot-toast";
 const ALLOW_MAX_USER = 16;
 interface UserInviteModalProps {
@@ -42,7 +45,7 @@ const UserInviteModal = (props: UserInviteModalProps) => {
   const [disabled, setDisabled] = useState(false);
   const { getGroupMembers: getGroupMembers2 } = useAddressContext();
 
-  const rtcGroup = rootStore.addressStore.groups.filter((item) => {
+  const rtcGroup = rootStore.addressStore.groups.filter((item: any) => {
     // @ts-ignore
     return item.groupid == groupId;
   });
@@ -52,7 +55,7 @@ const UserInviteModal = (props: UserInviteModalProps) => {
         getGroupMembers2(groupId, true);
       }
 
-      const members = rtcGroup[0]?.members?.map((item) => {
+      const members = rtcGroup[0]?.members?.map((item: any) => {
         const member = { ...item };
         if (!item?.attributes?.nickName) {
           if (!member.attributes) {
@@ -107,6 +110,7 @@ const UserInviteModal = (props: UserInviteModalProps) => {
         onInvite?.(contacts);
       }}
       enableMultipleSelection
+      // @ts-ignore
       onUserSelect={(user, users) => {
         if (users.length >= ALLOW_MAX_USER) {
           setDisabled(true);

@@ -1,5 +1,6 @@
 import axios from "axios";
-import { rootStore } from "easemob-chat-uikit";
+// @ts-ignore
+import { rootStore } from "../UIKit/ChatUI";
 
 // username -> chat user id
 

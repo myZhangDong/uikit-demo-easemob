@@ -2,11 +2,13 @@ import {
   Icon,
   Switch,
   Avatar,
+  // @ts-ignore
   RootContext,
   Modal,
+  // @ts-ignore
   rootStore,
   Input,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import i18next from "../../i18n";
 import classNames from "classnames";
 import { useContext } from "react";
@@ -26,6 +28,7 @@ const UserInfo = (props: UserInfoProps) => {
   const { className, conversation } = props;
   const context = useContext(RootContext);
   console.log("context", context);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode || "light";
 
@@ -33,10 +36,10 @@ const UserInfo = (props: UserInfoProps) => {
   const { addressStore, conversationStore } = rootStore;
   const userInfo =
     addressStore.contacts.filter(
-      (item) => item.userId === conversation.conversationId
+      (item: any) => item.userId === conversation.conversationId
     )[0] || {};
 
-  const currentCvs = conversationStore.conversationList.filter((item) => {
+  const currentCvs = conversationStore.conversationList.filter((item: any) => {
     return item.conversationId === conversation.conversationId;
   });
 

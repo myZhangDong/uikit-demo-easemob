@@ -2,7 +2,8 @@ import { useEffect, useState, FC } from "react";
 import "./index.css";
 import { observer } from "mobx-react-lite";
 import { Toaster } from "react-hot-toast";
-import { rootStore, Provider } from "easemob-chat-uikit";
+// @ts-ignore
+import { rootStore, Provider } from "./UIKit/ChatUI";
 import "easemob-chat-uikit/style.css";
 import "./App.css";
 import AppRoutes from "./routes/routes";
@@ -24,37 +25,6 @@ const ChatApp: FC<any> = () => {
     listener(store);
   }, [loginState.appKey, loginState.useDNS]);
 
-  const [config, setConfig] = useState({
-    conversationList: {
-      search: true,
-      item: {
-        moreAction: true,
-        deleteConversation: true,
-        presence: false,
-      },
-    },
-    chat: {
-      header: {
-        threadList: state.thread,
-        audioCall: true,
-        videoCall: true,
-      },
-      message: {
-        status: true,
-        reaction: state.reaction,
-        thread: state.thread,
-        recall: false,
-        translate: state.translation,
-        edit: true,
-        delete: true,
-        report: true,
-      },
-      messageInput: {
-        typing: state.typing,
-      },
-    },
-  });
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     const localGeneralConfig = localStorage.getItem("generalConfig");
@@ -64,40 +34,6 @@ const ChatApp: FC<any> = () => {
       i18next.changeLanguage(config.language);
     }
   }, []);
-
-  useEffect(() => {
-    setConfig({
-      conversationList: {
-        search: true,
-        item: {
-          moreAction: true,
-          deleteConversation: true,
-          presence: false,
-        },
-      },
-
-      chat: {
-        header: {
-          threadList: state.thread,
-          audioCall: true,
-          videoCall: true,
-        },
-        message: {
-          status: true,
-          reaction: state.reaction,
-          thread: state.thread,
-          recall: true,
-          translate: state.translation,
-          edit: true,
-          delete: true,
-          report: true,
-        },
-        messageInput: {
-          typing: state.typing,
-        },
-      },
-    });
-  }, [state]);
 
   const serverConfig = JSON.parse(localStorage.getItem("serverConfig") || "{}");
   console.log("app", loginState.useDNS, serverConfig);
@@ -109,9 +45,38 @@ const ChatApp: FC<any> = () => {
         restUrl: serverConfig.rest,
         msyncUrl: serverConfig.msync,
         useUserInfo: true,
-        translationTargetLanguage: 'en', //window.navigator.language,
+        translationTargetLanguage: "en", //window.navigator.language,
       }}
-      features={config}
+      features={{
+        conversationList: {
+          search: true,
+          item: {
+            moreAction: true,
+            deleteConversation: true,
+            presence: false,
+          },
+        },
+        chat: {
+          header: {
+            threadList: state.thread,
+            audioCall: true,
+            videoCall: true,
+          },
+          message: {
+            status: true,
+            reaction: state.reaction,
+            thread: state.thread,
+            recall: false,
+            translate: state.translation,
+            edit: true,
+            delete: true,
+            report: true,
+          },
+          messageInput: {
+            typing: state.typing,
+          },
+        },
+      }}
       theme={{
         primaryColor: state.color.h,
         mode: state.dark ? "dark" : "light",

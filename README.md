@@ -21,14 +21,6 @@
 
 1. 配置项目
 
-创建 .env.config.ts 文件放入 src 目录下，配置自己的 AppKey, AppId, AppServer
-
-```typescript
-export AppKey = 'you AppKey';
-export AppId = 'your AppId'
-export AppServer = 'https://example.com/'
-```
-
 2. 安装依赖
 
 ```

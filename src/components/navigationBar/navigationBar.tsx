@@ -11,9 +11,11 @@ import {
   Tooltip,
   Avatar,
   Icon,
+  // @ts-ignore
   rootStore,
+  // @ts-ignore
   RootContext,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
 import { useAppSelector } from "../../hooks";
@@ -42,6 +44,7 @@ const NavigationBar = forwardRef(({ tabs }: NavigationBarProps, ref) => {
     rootStore.addressStore.appUsersInfo[rootStore.client.user]?.avatarurl;
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
   const state = useAppSelector((state) => state.appConfig);

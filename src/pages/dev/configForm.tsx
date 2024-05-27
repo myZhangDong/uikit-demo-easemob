@@ -1,4 +1,4 @@
-import { Switch } from "easemob-chat-uikit";
+import { Switch } from "../../UIKit/ChatUI";
 import { ChangeEvent } from "react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";

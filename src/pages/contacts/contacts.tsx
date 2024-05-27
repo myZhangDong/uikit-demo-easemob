@@ -1,13 +1,17 @@
 import { useState } from "react";
 import {
+  // @ts-ignore
   ContactList,
+  // @ts-ignore
   ContactDetail,
+  // @ts-ignore
   Header,
   Icon,
   Modal,
   Input,
+  // @ts-ignore
   rootStore,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import "./contacts.scss";
 import toast from "../../components/toast/toast";
 import i18next from "../../i18n";
@@ -60,7 +64,7 @@ const Contacts = ({
             ></Header>
           }
           // className="conversation"
-          onItemClick={(data) => {
+          onItemClick={(data: any) => {
             let type = data.type;
             // if (data.type == "request") {
             //   type = "contact";
@@ -89,7 +93,7 @@ const Contacts = ({
             console.log("onAudioCall");
             onAudioCall?.();
           }}
-          onUserIdCopied={(userId) => {
+          onUserIdCopied={() => {
             toast.success(i18next.t("copySuccess"));
           }}
         ></ContactDetail>

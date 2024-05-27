@@ -8,7 +8,7 @@ import React, {
 import i18next from "../../i18n";
 import loading from "../../assets/loading.png";
 import closeIcon from "../../assets/Xmark@2x.png";
-import { Icon, Checkbox } from "easemob-chat-uikit";
+import { Icon, Checkbox } from "../../UIKit/ChatUI";
 import toast from "../../components/toast/toast";
 import { useNavigate } from "react-router-dom";
 import { sendSms, getChatToken, getToken } from "../../service/login";

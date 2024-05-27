@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import "./settingTab.scss";
 import classNames from "classnames";
 import i18next from "../../../i18n";
-import { RootContext } from "easemob-chat-uikit";
+// @ts-ignore
+import { RootContext } from "../../../UIKit/ChatUI";
 import { use } from "i18next";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 interface Tab {
@@ -32,6 +33,7 @@ const SettingTab = (props: SettingMenuProps) => {
   const { key, index } = getKeyIndex(activeKey);
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   console.log("theme >>>", context);
   const themeMode = theme?.mode;

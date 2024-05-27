@@ -7,29 +7,30 @@ import {
   useContext,
 } from "react";
 import {
+  // @ts-ignore
   Chat,
+  // @ts-ignore
   GroupDetail,
+  // @ts-ignore
   ContactList,
-  ContactDetail,
+  // @ts-ignore
   Header,
+  // @ts-ignore
   rootStore,
+  // @ts-ignore
   ConversationList,
-  Provider,
-  useClient,
   Icon,
-  Avatar,
+  // @ts-ignore
   MessageList,
-  useConversationContext,
-  useChatContext,
+  // @ts-ignore
   UserSelect,
-  TextMessage,
-  GroupMember,
   Modal,
   Input,
-  eventHandler,
+  // @ts-ignore
   Thread,
+  // @ts-ignore
   RootContext,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import toast from "../../components/toast/toast";
 import { APP_ID, appKey } from "../../config";
 import { getRtcToken, getRtcChannelMembers } from "../../service/rtc";
@@ -63,13 +64,14 @@ const ChatContainer = forwardRef((props, ref) => {
   const [rtcGroupId, setRtcGroupId] = useState(""); // 当前音视频房间的groupId
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
   };
 
-  const isInGroup = rootStore.addressStore.groups.some((item) => {
+  const isInGroup = rootStore.addressStore.groups.some((item: any) => {
     // @ts-ignore
     return item.groupid == cvsItem.conversationId;
   });
@@ -153,8 +155,8 @@ const ChatContainer = forwardRef((props, ref) => {
     if (rootStore.loginState) {
       const groupIds =
         rootStore.addressStore.groups
-          .filter((item) => !item.avatarUrl)
-          .map((item) => {
+          .filter((item: any) => !item.avatarUrl)
+          .map((item: any) => {
             //@ts-ignore
             return item.groupid;
           }) || [];
@@ -257,7 +259,7 @@ const ChatContainer = forwardRef((props, ref) => {
               avatar={<></>}
             ></Header>
           )}
-          onItemClick={(item) => {
+          onItemClick={(item: any) => {
             setConversationDetailVisible(false);
             setCvsItem(item);
           }}
@@ -370,7 +372,7 @@ const ChatContainer = forwardRef((props, ref) => {
             }}
             messageInputProps={{
               enabledTyping: true,
-              onSendMessage: (msg) => {
+              onSendMessage: (msg: any) => {
                 // 发送消息回调，如果是合并转发的消息，显示转发弹窗
                 if (msg.type == "combine") {
                   setForwardedMessages(msg);
@@ -543,6 +545,7 @@ const ChatContainer = forwardRef((props, ref) => {
         }}
         okText={i18next.t("create")}
         enableMultipleSelection
+        // @ts-ignore
         onUserSelect={(user, users) => {
           setSelectedUsers(users);
         }}
@@ -563,7 +566,7 @@ const ChatContainer = forwardRef((props, ref) => {
             style={{ padding: "24px" }}
             menu={["groups", "contacts"]}
             header={<></>}
-            onItemClick={(data) => {
+            onItemClick={(data: any) => {
               forwardedMessages.to = data.id;
               forwardedMessages.chatType =
                 data.type == "contact" ? "singleChat" : "groupChat";

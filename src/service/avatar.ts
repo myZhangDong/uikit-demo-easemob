@@ -1,5 +1,6 @@
 import axios from "axios";
-import { rootStore } from "easemob-chat-uikit";
+// @ts-ignore
+import { rootStore } from "../UIKit/ChatUI";
 export const uploadImage = (formData: FormData) => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + rootStore.client.context.accessToken;

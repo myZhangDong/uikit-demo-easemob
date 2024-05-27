@@ -1,7 +1,7 @@
 import Cropper from "react-easy-crop";
 import { useState, useCallback } from "react";
 import "./imageCrop.scss";
-import { Button, Modal, ModalProps } from "easemob-chat-uikit";
+import { Button, Modal, ModalProps } from "../../UIKit/ChatUI";
 import getCroppedImg from "../../utils/cropImg";
 const dogImg =
   "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000";

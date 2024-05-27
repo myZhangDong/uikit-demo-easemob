@@ -1,12 +1,15 @@
 import {
   Input,
+  // @ts-ignore
   ContactList,
   Popover,
   Tooltip,
+  // @ts-ignore
   rootStore,
   Avatar,
+  // @ts-ignore
   RootContext,
-} from "easemob-chat-uikit";
+} from "../../UIKit/ChatUI";
 import { useRef, useEffect, ChangeEvent, useState, useContext } from "react";
 import classNames from "classnames";
 import i18next from "../../i18n";
@@ -35,7 +38,7 @@ const CreateChat = (props: CreateChatProps) => {
     } else {
       //setShowSearch(false);
     }
-    const searched = contacts.filter((contact) => {
+    const searched = contacts.filter((contact: any) => {
       if (contact.remark) {
         return contact.remark.includes(e.target.value);
       } else if (contact.nickname) {
@@ -57,6 +60,7 @@ const CreateChat = (props: CreateChatProps) => {
   const [showSearch, setShowSearch] = useState(true);
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
 

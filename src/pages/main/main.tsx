@@ -3,31 +3,14 @@ import { useEffect, useState, FC, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import toast, { Toaster } from "react-hot-toast";
 import {
-  Chat,
-  GroupDetail,
-  ContactList,
-  ContactDetail,
-  Header,
+  // @ts-ignore
   rootStore,
-  ConversationList,
-  Provider,
+  // @ts-ignore
   useClient,
   Icon,
-  Avatar,
-  MessageList,
-  useConversationContext,
-  useChatContext,
-  UserSelect,
-  TextMessage,
-  GroupMember,
-  Modal,
-  Input,
   eventHandler,
-  Tooltip,
-  Button,
-  Thread,
-} from "easemob-chat-uikit";
-import "easemob-chat-uikit/style.css";
+} from "../../UIKit/ChatUI";
+import "../../UIKit/style.css";
 import "./main.scss";
 import NavigationBar from "../../components/navigationBar/navigationBar";
 import ChatContainer from "../chatContainer/chatContainer";

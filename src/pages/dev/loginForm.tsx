@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Icon } from "easemob-chat-uikit";
+import { Icon } from "../../UIKit/ChatUI";
 import i18next from "../../i18n";
 
 import loading from "../../assets/loading.png";

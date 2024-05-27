@@ -5,8 +5,9 @@ import {
   Button,
   Icon,
   Collapse,
+  // @ts-ignore
   RootContext,
-} from "easemob-chat-uikit";
+} from "../../../UIKit/ChatUI";
 import React, { useState, useEffect, useContext } from "react";
 import { HuePicker } from "react-color";
 import "./general.scss";
@@ -33,6 +34,7 @@ const General = () => {
 
   const prefixCls = "user-info";
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const appThemeMode = theme?.mode;
   const [generalConfig, setGeneralConfig] = useState<GeneralConfig>({

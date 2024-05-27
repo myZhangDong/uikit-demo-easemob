@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import i18next from "../../../i18n";
-import { Icon, Switch, RootContext } from "easemob-chat-uikit";
+// @ts-ignore
+import { Icon, Switch, RootContext } from "../../../UIKit/ChatUI";
 import classNames from "classnames";
 const About = () => {
   const prefixCls = "user-info";
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
   return (

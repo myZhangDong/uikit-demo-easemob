@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import "./notification.scss";
 import i18next from "../../../i18n";
-import { Icon, Switch, RootContext } from "easemob-chat-uikit";
+// @ts-ignore
+import { Icon, Switch, RootContext } from "../../../UIKit/ChatUI";
 import classNames from "classnames";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { updateAppConfig } from "../../../store/appConfigSlice";
@@ -21,6 +22,7 @@ const Notification = () => {
   };
 
   const context = useContext(RootContext);
+  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
 
