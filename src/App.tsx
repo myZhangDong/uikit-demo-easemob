@@ -24,38 +24,6 @@ const ChatApp: FC<any> = () => {
     listener(store);
   }, [loginState.appKey, loginState.useDNS]);
 
-  const [config, setConfig] = useState({
-    conversationList: {
-      search: true,
-      item: {
-        moreAction: true,
-        deleteConversation: true,
-        presence: false,
-      },
-    },
-    chat: {
-      header: {
-        threadList: state.thread,
-        audioCall: true,
-        videoCall: true,
-      },
-      message: {
-        status: true,
-        reaction: state.reaction,
-        thread: state.thread,
-        recall: false,
-        translate: state.translation,
-        edit: true,
-        delete: true,
-        report: true,
-        pin: true,
-      },
-      messageInput: {
-        typing: state.typing,
-      },
-    },
-  });
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     const localGeneralConfig = localStorage.getItem("generalConfig");
@@ -65,41 +33,6 @@ const ChatApp: FC<any> = () => {
       // i18next.changeLanguage(config.language);
     }
   }, []);
-
-  useEffect(() => {
-    setConfig({
-      conversationList: {
-        search: true,
-        item: {
-          moreAction: true,
-          deleteConversation: true,
-          presence: false,
-        },
-      },
-
-      chat: {
-        header: {
-          threadList: state.thread,
-          audioCall: true,
-          videoCall: true,
-        },
-        message: {
-          status: true,
-          reaction: state.reaction,
-          thread: state.thread,
-          recall: true,
-          translate: state.translation,
-          edit: true,
-          delete: true,
-          report: true,
-          pin: true,
-        },
-        messageInput: {
-          typing: state.typing,
-        },
-      },
-    });
-  }, [state]);
 
   const serverConfig = JSON.parse(localStorage.getItem("serverConfig") || "{}");
   console.log("app", loginState.useDNS, serverConfig);
@@ -113,7 +46,37 @@ const ChatApp: FC<any> = () => {
         useUserInfo: true,
         translationTargetLanguage: state.translationTargetLanguage,
       }}
-      features={config}
+      features={{
+        conversationList: {
+          search: true,
+          item: {
+            moreAction: true,
+            deleteConversation: true,
+            presence: false,
+          },
+        },
+        chat: {
+          header: {
+            threadList: state.thread,
+            audioCall: true,
+            videoCall: true,
+          },
+          message: {
+            status: true,
+            reaction: state.reaction,
+            thread: state.thread,
+            recall: false,
+            translate: state.translation,
+            edit: true,
+            delete: true,
+            report: true,
+            pin: true,
+          },
+          messageInput: {
+            typing: state.typing,
+          },
+        },
+      }}
       theme={{
         primaryColor: state.color.h,
         mode: state.dark ? "dark" : "light",
