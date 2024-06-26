@@ -2,6 +2,12 @@ import React, { useContext } from "react";
 import i18next from "../../../i18n";
 import { Icon, Switch, RootContext } from "easemob-chat-uikit";
 import classNames from "classnames";
+import {
+  DEMO_VERSION,
+  SDK_VERSION,
+  UIKIT_VERSION,
+  appKey,
+} from "../../../config";
 const About = () => {
   const prefixCls = "user-info";
 
@@ -23,8 +29,8 @@ const About = () => {
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("demoVersion")}</span>
-                <div>1.0.0</div>
+                <span>{i18next.t("SDK version")}</span>
+                <div>{SDK_VERSION}</div>
               </div>
             </div>
             <div className={`${prefixCls}-content-item`}>
@@ -33,70 +39,64 @@ const About = () => {
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("uikitVersion")}</span>
-                <div>1.0.0</div>
+                <div>{UIKIT_VERSION}</div>
               </div>
             </div>
-            <div className={`${prefixCls}-content-item`}>
+            {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("officialWebsite")}</span>
                 <div>
-                  <a
-                    href="https://www.huanxin.com/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    www.huanxin.com
-                  </a>
+                  
                 </div>
               </div>
-            </div>
-            <div className={`${prefixCls}-content-item`}>
+            </div> */}
+            {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("hotline")}</span>
                 <div>
-                  <a href="tel:4006221776"></a>400-622-1776
+                  <a href=""></a>
                 </div>
               </div>
-            </div>
-            <div className={`${prefixCls}-content-item`}>
+            </div> */}
+            {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("businessDevelopment")}</span>
                 <div>
-                  <a href="mailto:bd@easemob.com">bd@easemob.com</a>
+                  <a href=""></a>
                 </div>
               </div>
-            </div>
-            <div className={`${prefixCls}-content-item`}>
+            </div> */}
+            {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("channelCooperation")}</span>
                 <div>
-                  <a href="mailto:qudao@easemob.com">qudao@easemob.com</a>
+                  <a href=""></a>
                 </div>
               </div>
-            </div>
-            <div className={`${prefixCls}-content-item`}>
+            </div> */}
+            {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
                 <span>{i18next.t("issues")}</span>
                 <div>
-                  <a href="mailto:issues@easemob.com">issues@easemob.com</a>
+                  <a href=""></a>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
       </main>

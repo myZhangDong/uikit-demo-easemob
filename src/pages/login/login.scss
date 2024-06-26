@@ -10,6 +10,7 @@
     min-height: 698px;
     background-position: center;
     height: 100vh;
+    font-family: Roboto;
 }
 .language-switch{
     position: absolute;
@@ -34,15 +35,22 @@
     align-items: center;
     position: relative;
     gap: 16px;
+    padding-top: 48px;
+}
+
+.login-form.ground{
+    border-radius: 16px;
+    .login-form-input{
+        border-radius: 24px;
+    }
 }
 
 .login-form-icon {
-    background-image: url('../../assets/djs.png');
+    background-image: url('../../assets/Icon@2x.jpg');
     background-size: contain;
     background-repeat: no-repeat;
-    width: 100px;
-    height: 100px;
-    margin-top: 32px;
+    width: 110px;
+    height: 110px;
 }
 
 .login-form-AC {
@@ -124,20 +132,23 @@
     font-weight: 500;
     line-height: 20px;
     color: #464E53;
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
     gap: 4px;
     span {
         color: #009EFF;
         cursor: pointer;
     }
     margin-bottom: 32px;
+    width: 288px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    align-items: flex-start;
+    text-align: left;
 }
 .login-copyright {
     color: #464E53;
     text-align: center;
-    /* 简体中文/次级标题/小 */
-    font-family: "Noto Sans SC";
     font-size: 14px;
     font-style: normal;
     font-weight: 500;

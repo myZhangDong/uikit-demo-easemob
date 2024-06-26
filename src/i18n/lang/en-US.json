@@ -127,6 +127,20 @@
         "HasAccount": "Already have an account?",
         "ComnfirmPassword": "Confirm password",
         "BacktoLogin": "Back to Login",
-        "Register": "Sign Up"
+        "Register": "Sign Up",
+        "Username": "Username",
+        "customStatus": "Custom Status",
+        "Online": "Online",
+        "Busy": "Busy",
+        "Away": "Away",
+        "Offline": "Offline",
+        "Do Not Disturb": "Do Not Disturb",
+        "Custom": "Custom Status",
+        "customPresenceTitle": "Custom Status",
+        "blocklist": "Block List",
+        "contactBlocked": "Contact Blocked",
+        "blockContact": "Block Contact",
+        "Confirm blocking user": "Confirm blocking user",
+        "translationLanguage": "Target Language"
     }
 }

@@ -5,6 +5,7 @@ import PersonalInfo from "./personalInfo/personalInfo";
 import Notification from "./notification/notification";
 import About from "./about/about";
 import General from "./general/general";
+import Blocklist from "./blocklist/blocklist";
 import i18next from "../../i18n";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../hooks";
@@ -28,28 +29,51 @@ const Settings = () => {
                   <Icon type="PERSON_SINGLE_FILL" width={24} height={24}></Icon>
                 ),
                 title: i18next.t("profileInfo"),
-                key: "basic",
+                key: "personal",
                 content: <PersonalInfo key="personal" />,
                 type: "button",
               },
               {
+                //@ts-ignore
+                icon: <Icon type="CIRCLE_N_DOT" width={24} height={24}></Icon>,
+                title: i18next.t("customStatus"),
+                key: "presence",
+                content: [
+                  "Online",
+                  "Offline",
+                  "Away",
+                  "Busy",
+                  "Do Not Disturb",
+                  "Custom",
+                ],
+                type: "menu",
+              },
+              {
                 icon: <Icon type="GEAR" width={24} height={24}></Icon>,
                 title: i18next.t("general"),
-                key: "basic",
+                key: "general",
                 content: <General />,
                 type: "button",
               },
               {
                 icon: <Icon type="BELL" width={24} height={24}></Icon>,
                 title: i18next.t("pushNotifications"),
-                key: "basic",
+                key: "notification",
                 content: <Notification />,
+                type: "button",
+              },
+              {
+                //@ts-ignore
+                icon: <Icon type="LOCK" width={24} height={24}></Icon>,
+                title: i18next.t("privacy"),
+                key: "privacy",
+                content: <Blocklist />,
                 type: "button",
               },
               {
                 icon: <Icon type="DOC" width={24} height={24}></Icon>,
                 title: i18next.t("about"),
-                key: "basic",
+                key: "about",
                 content: <About />,
                 type: "button",
               },
@@ -68,7 +92,7 @@ const Settings = () => {
                   ></Icon>
                 ),
                 title: i18next.t("logout"),
-                key: "basic",
+                key: "login",
                 content: "",
                 type: "button",
                 onClick: () => {

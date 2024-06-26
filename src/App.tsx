@@ -48,6 +48,7 @@ const ChatApp: FC<any> = () => {
         edit: true,
         delete: true,
         report: true,
+        pin: true,
       },
       messageInput: {
         typing: state.typing,
@@ -61,7 +62,7 @@ const ChatApp: FC<any> = () => {
     if (localGeneralConfig) {
       const config = JSON.parse(localGeneralConfig);
       dispatch(updateAppConfig(config));
-      i18next.changeLanguage(config.language);
+      // i18next.changeLanguage(config.language);
     }
   }, []);
 
@@ -91,6 +92,7 @@ const ChatApp: FC<any> = () => {
           edit: true,
           delete: true,
           report: true,
+          pin: true,
         },
         messageInput: {
           typing: state.typing,
@@ -109,7 +111,7 @@ const ChatApp: FC<any> = () => {
         restUrl: serverConfig.rest,
         msyncUrl: serverConfig.msync,
         useUserInfo: true,
-        translationTargetLanguage: 'en', //window.navigator.language,
+        translationTargetLanguage: state.translationTargetLanguage,
       }}
       features={config}
       theme={{
@@ -120,7 +122,7 @@ const ChatApp: FC<any> = () => {
         componentsShape: state.theme == "classic" ? "square" : "ground",
       }}
       local={{
-        lng: state.language || "zh",
+        lng: "en",
       }}
     >
       <AppRoutes></AppRoutes>
