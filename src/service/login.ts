@@ -2,7 +2,7 @@ import axios from "axios";
 const isSandBox = false;
 const domain =
   (window.location.protocol === "https:" ? "https:" : "http:") +
-  (isSandBox ? "//a1-hsb.easemob.com" : "//a1-appserver.easemob.com");
+  (isSandBox ? "//a1-hsb.easemob.com" : "//a41-appserver-dev.easemob.com");
 
 export const sendSms = (phoneNumber: string) => {
   return axios.post(domain + `/inside/app/sms/send/${phoneNumber}`, {
@@ -11,10 +11,18 @@ export const sendSms = (phoneNumber: string) => {
 };
 
 export const getChatToken = (phoneNumber: string, VCode: string) => {
-  return axios.post(domain + "/inside/app/user/login/V2", {
-    phoneNumber: phoneNumber,
-    smsCode: VCode,
-  });
+  return axios.post(
+    domain + "/inside/app/user/login/V2",
+    {
+      phoneNumber: phoneNumber,
+      smsCode: VCode,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   // .then(function (response) {
   //     console.log(response);
   //     const { token, chatUserName } = response.data
@@ -29,16 +37,27 @@ export const getChatToken = (phoneNumber: string, VCode: string) => {
 };
 
 export const getToken = (agoraId: string, password: string) => {
-  return axios.post("https://a41.chat.agora.io/app/chat/user/login", {
-    userAccount: agoraId,
-    userPassword: password,
-  });
+  return axios.post(
+    "https://a41-appserver-dev.easemob.com/app/chat/user/login",
+    {
+      userAccount: agoraId,
+      userPassword: password,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   // return postData('https://a41.chat.agora.io/app/chat/user/login', { "userAccount": agoraId, "userPassword": password })
 };
 export const signUp = (agoraId: string, password: string) => {
-  return axios.post("https://a41.chat.agora.io/app/chat/user/register", {
-    userAccount: agoraId,
-    userPassword: password,
-  });
+  return axios.post(
+    "https://a41-appserver-dev.easemob.com/app/chat/user/register",
+    {
+      userAccount: agoraId,
+      userPassword: password,
+    }
+  );
   // return postData('https://a41.chat.agora.io/app/chat/user/register', { "userAccount": agoraId, "userPassword": password })
 };
