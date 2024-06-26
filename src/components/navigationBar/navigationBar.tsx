@@ -11,11 +11,9 @@ import {
   Tooltip,
   Avatar,
   Icon,
-  // @ts-ignore
   rootStore,
-  // @ts-ignore
   RootContext,
-} from "../../UIKit/ChatUI";
+} from "easemob-chat-uikit";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
 import { useAppSelector } from "../../hooks";
@@ -44,10 +42,16 @@ const NavigationBar = forwardRef(({ tabs }: NavigationBarProps, ref) => {
     rootStore.addressStore.appUsersInfo[rootStore.client.user]?.avatarurl;
 
   const context = useContext(RootContext);
-  // @ts-ignore
-  const { theme } = context;
+  const { theme, presenceMap } = context;
   const themeMode = theme?.mode;
   const state = useAppSelector((state) => state.appConfig);
+
+  const myInfo =
+    rootStore.addressStore.appUsersInfo[rootStore.client.user] || {};
+  const presence = myInfo.isOnline
+    ? presenceMap?.[myInfo.presenceExt ?? ""] ?? presenceMap?.["Online"]
+    : presenceMap?.["Offline"];
+
   return (
     <div
       className={classNames("navigation-container", {
@@ -61,6 +65,7 @@ const NavigationBar = forwardRef(({ tabs }: NavigationBarProps, ref) => {
             shape={state.theme == "voyage" ? "circle" : "square"}
             size={40}
             src={avatarUrl}
+            presence={{ visible: true, icon: presence }}
           >
             {rootStore.addressStore.appUsersInfo[rootStore.client.user]
               ?.nickname || rootStore.client.user}

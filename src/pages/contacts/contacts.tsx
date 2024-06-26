@@ -1,17 +1,14 @@
 import { useState } from "react";
 import {
-  // @ts-ignore
   ContactList,
-  // @ts-ignore
   ContactDetail,
-  // @ts-ignore
   Header,
   Icon,
   Modal,
   Input,
-  // @ts-ignore
   rootStore,
-} from "../../UIKit/ChatUI";
+  Button,
+} from "easemob-chat-uikit";
 import "./contacts.scss";
 import toast from "../../components/toast/toast";
 import i18next from "../../i18n";
@@ -48,23 +45,26 @@ const Contacts = ({
               content={i18next.t("contacts")}
               suffixIcon={
                 <div
+                  className="cui-header-iconBox"
                   title={i18next.t("addContact")}
                   style={{ cursor: "pointer" }}
                 >
-                  <Icon
-                    type="PERSON_ADD"
-                    width={24}
-                    height={24}
-                    onClick={() => {
-                      setAddContactVisible(true);
-                    }}
-                  ></Icon>
+                  <Button type="text" shape="circle">
+                    <Icon
+                      type="PERSON_ADD"
+                      width={24}
+                      height={24}
+                      onClick={() => {
+                        setAddContactVisible(true);
+                      }}
+                    ></Icon>
+                  </Button>
                 </div>
               }
             ></Header>
           }
           // className="conversation"
-          onItemClick={(data: any) => {
+          onItemClick={(data) => {
             let type = data.type;
             // if (data.type == "request") {
             //   type = "contact";
@@ -93,7 +93,7 @@ const Contacts = ({
             console.log("onAudioCall");
             onAudioCall?.();
           }}
-          onUserIdCopied={() => {
+          onUserIdCopied={(userId) => {
             toast.success(i18next.t("copySuccess"));
           }}
         ></ContactDetail>

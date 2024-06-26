@@ -7,30 +7,31 @@ import {
   useContext,
 } from "react";
 import {
-  // @ts-ignore
   Chat,
-  // @ts-ignore
   GroupDetail,
-  // @ts-ignore
   ContactList,
-  // @ts-ignore
+  ContactDetail,
   Header,
-  // @ts-ignore
   rootStore,
-  // @ts-ignore
   ConversationList,
+  Provider,
+  useClient,
   Icon,
-  // @ts-ignore
+  Avatar,
   MessageList,
-  // @ts-ignore
+  useConversationContext,
+  useChatContext,
   UserSelect,
+  TextMessage,
+  GroupMember,
   Modal,
   Input,
-  // @ts-ignore
+  eventHandler,
   Thread,
-  // @ts-ignore
+  PinnedMessage,
+  usePinnedMessage,
   RootContext,
-} from "../../UIKit/ChatUI";
+} from "easemob-chat-uikit";
 import toast from "../../components/toast/toast";
 import { APP_ID, appKey } from "../../config";
 import { getRtcToken, getRtcChannelMembers } from "../../service/rtc";
@@ -43,6 +44,8 @@ import { useAppSelector, useAppDispatch } from "../../hooks";
 import CreateChat from "./createChat";
 import classNames from "classnames";
 import i18next from "../../i18n";
+import { use } from "i18next";
+import { set } from "mobx";
 const ChatContainer = forwardRef((props, ref) => {
   const appConfig = useAppSelector((state) => state.appConfig);
   const [userSelectVisible, setUserSelectVisible] = useState(false); // 是否显示创建群组弹窗
@@ -64,14 +67,13 @@ const ChatContainer = forwardRef((props, ref) => {
   const [rtcGroupId, setRtcGroupId] = useState(""); // 当前音视频房间的groupId
 
   const context = useContext(RootContext);
-  // @ts-ignore
   const { theme } = context;
   const themeMode = theme?.mode;
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
   };
 
-  const isInGroup = rootStore.addressStore.groups.some((item: any) => {
+  const isInGroup = rootStore.addressStore.groups.some((item) => {
     // @ts-ignore
     return item.groupid == cvsItem.conversationId;
   });
@@ -79,6 +81,9 @@ const ChatContainer = forwardRef((props, ref) => {
     if (cvsItem.chatType == "groupChat") {
       if (thread.showThreadPanel) {
         rootStore.threadStore.setThreadVisible(false);
+      }
+      if (pinMsgVisible) {
+        hidePinMsg();
       }
       isInGroup && setConversationDetailVisible((value) => !value);
     } else {
@@ -155,8 +160,8 @@ const ChatContainer = forwardRef((props, ref) => {
     if (rootStore.loginState) {
       const groupIds =
         rootStore.addressStore.groups
-          .filter((item: any) => !item.avatarUrl)
-          .map((item: any) => {
+          .filter((item) => !item.avatarUrl)
+          .map((item) => {
             //@ts-ignore
             return item.groupid;
           }) || [];
@@ -186,6 +191,22 @@ const ChatContainer = forwardRef((props, ref) => {
 
   console.log("appConfig ---", appConfig);
 
+  // ---- pin message ----
+  const { visible: pinMsgVisible, hide: hidePinMsg } = usePinnedMessage();
+
+  useEffect(() => {
+    if (pinMsgVisible) {
+      thread.setThreadVisible(false);
+      setConversationDetailVisible(false);
+    }
+  }, [pinMsgVisible]);
+
+  useEffect(() => {
+    if (thread.showThreadPanel) {
+      hidePinMsg();
+      setConversationDetailVisible(false);
+    }
+  }, [thread.showThreadPanel]);
   return (
     <div
       className={classNames("chat-container", {
@@ -259,7 +280,7 @@ const ChatContainer = forwardRef((props, ref) => {
               avatar={<></>}
             ></Header>
           )}
-          onItemClick={(item: any) => {
+          onItemClick={(item) => {
             setConversationDetailVisible(false);
             setCvsItem(item);
           }}
@@ -366,14 +387,19 @@ const ChatContainer = forwardRef((props, ref) => {
                       content: "REPORT",
                       onClick: () => {},
                     },
+                    {
+                      content: "PIN",
+                      onClick: () => {},
+                    },
                   ],
                 },
               },
             }}
             messageInputProps={{
               enabledTyping: true,
-              onSendMessage: (msg: any) => {
+              onSendMessage: (msg) => {
                 // 发送消息回调，如果是合并转发的消息，显示转发弹窗
+                // @ts-ignore
                 if (msg.type == "combine") {
                   setForwardedMessages(msg);
                   setContactListVisible(true);
@@ -386,6 +412,8 @@ const ChatContainer = forwardRef((props, ref) => {
                 visible: true,
                 actions: [],
               },
+              style: { cursor: "pointer" },
+              onClickAvatar: handleEllipsisClick,
               onClickEllipsis: handleEllipsisClick,
             }}
             rtcConfig={{
@@ -453,84 +481,99 @@ const ChatContainer = forwardRef((props, ref) => {
           )}
         </div>
         {/** 是否显示子区 */}
-        {thread.showThreadPanel && (
-          <div className="chat-container-chat-right">
-            <Thread
-              messageListProps={{
-                renderUserProfile: () => null,
-                messageProps: {
-                  // @ts-ignore
-                  onForwardMessage: (msg: { [key: string]: any }) => {
-                    console.log("onForwardMessage --", msg);
-                    let forwardMsg = { ...msg };
+        {thread.showThreadPanel &&
+          !pinMsgVisible &&
+          !conversationDetailVisible && (
+            <div className="chat-container-chat-right">
+              <Thread
+                messageListProps={{
+                  renderUserProfile: () => null,
+                  messageProps: {
                     // @ts-ignore
-                    forwardMsg.id = Date.now() + "";
-                    // @ts-ignore
-                    forwardMsg.from = rootStore.client.user;
-                    // @ts-ignore
-                    forwardMsg.ext = {
-                      ease_chat_uikit_user_info: {
-                        nickname:
-                          rootStore.addressStore.appUsersInfo[
-                            rootStore.client.user
-                          ].nickname,
-                        avatarURL:
-                          rootStore.addressStore.appUsersInfo[
-                            rootStore.client.user
-                          ].avatarurl,
-                      },
-                    };
-                    // @ts-ignore
-                    forwardMsg.reactions = undefined;
-                    // @ts-ignore
-                    forwardMsg.isChatThread = false;
-                    forwardMsg.chatThreadOverview = undefined;
-                    forwardMsg.chatThread = undefined;
-                    setForwardedMessages(forwardMsg);
-                    setContactListVisible(true);
-                  },
-                  customAction: {
-                    visible: true,
-                    icon: null,
-                    actions: [
-                      {
-                        content: "REPLY",
-                        onClick: () => {},
-                      },
+                    onForwardMessage: (msg: { [key: string]: any }) => {
+                      console.log("onForwardMessage --", msg);
+                      let forwardMsg = { ...msg };
+                      // @ts-ignore
+                      forwardMsg.id = Date.now() + "";
+                      // @ts-ignore
+                      forwardMsg.from = rootStore.client.user;
+                      // @ts-ignore
+                      forwardMsg.ext = {
+                        ease_chat_uikit_user_info: {
+                          nickname:
+                            rootStore.addressStore.appUsersInfo[
+                              rootStore.client.user
+                            ].nickname,
+                          avatarURL:
+                            rootStore.addressStore.appUsersInfo[
+                              rootStore.client.user
+                            ].avatarurl,
+                        },
+                      };
+                      // @ts-ignore
+                      forwardMsg.reactions = undefined;
+                      // @ts-ignore
+                      forwardMsg.isChatThread = false;
+                      forwardMsg.chatThreadOverview = undefined;
+                      forwardMsg.chatThread = undefined;
+                      setForwardedMessages(forwardMsg);
+                      setContactListVisible(true);
+                    },
+                    customAction: {
+                      visible: true,
+                      icon: null,
+                      actions: [
+                        {
+                          content: "REPLY",
+                          onClick: () => {},
+                        },
 
-                      {
-                        content: "TRANSLATE",
-                        onClick: () => {},
-                      },
-                      {
-                        content: "Modify",
-                        onClick: () => {},
-                      },
-                      {
-                        content: "SELECT",
-                        onClick: () => {},
-                      },
-                      {
-                        content: "FORWARD",
-                        onClick: () => {},
-                      },
-                    ],
+                        {
+                          content: "TRANSLATE",
+                          onClick: () => {},
+                        },
+                        {
+                          content: "Modify",
+                          onClick: () => {},
+                        },
+                        {
+                          content: "SELECT",
+                          onClick: () => {},
+                        },
+                        {
+                          content: "FORWARD",
+                          onClick: () => {},
+                        },
+                        {
+                          content: "PIN",
+                          onClick: () => {},
+                        },
+                      ],
+                    },
                   },
-                },
-              }}
-              messageInputProps={{
-                onSendMessage: (msg: any) => {
-                  console.log("message", msg);
-                  if (msg.type == "combine") {
-                    setForwardedMessages(msg);
-                    setContactListVisible(true);
-                  }
-                },
-                // enabledTyping: state?.typingSwitch,
-              }}
-            ></Thread>
-          </div>
-        )}
+                }}
+                messageInputProps={{
+                  onSendMessage: (msg: any) => {
+                    console.log("message", msg);
+                    if (msg.type == "combine") {
+                      setForwardedMessages(msg);
+                      setContactListVisible(true);
+                    }
+                  },
+                  // enabledTyping: state?.typingSwitch,
+                }}
+              ></Thread>
+            </div>
+          )}
+
+        {/** 是否显示 pin message*/}
+        {pinMsgVisible &&
+          !thread.showThreadPanel &&
+          !conversationDetailVisible && (
+            <div className="chat-container-chat-right">
+              <PinnedMessage />
+            </div>
+          )}
       </div>
       {/** 创建群组的联系人弹窗 */}
       <UserSelect
@@ -545,7 +588,6 @@ const ChatContainer = forwardRef((props, ref) => {
         }}
         okText={i18next.t("create")}
         enableMultipleSelection
-        // @ts-ignore
         onUserSelect={(user, users) => {
           setSelectedUsers(users);
         }}
@@ -566,10 +608,11 @@ const ChatContainer = forwardRef((props, ref) => {
             style={{ padding: "24px" }}
             menu={["groups", "contacts"]}
             header={<></>}
-            onItemClick={(data: any) => {
+            onItemClick={(data) => {
               forwardedMessages.to = data.id;
               forwardedMessages.chatType =
                 data.type == "contact" ? "singleChat" : "groupChat";
+              //@ts-ignore
               rootStore.messageStore.sendMessage(forwardedMessages);
               setContactListVisible(false);
 

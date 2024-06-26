@@ -2,17 +2,14 @@ import React, { ChangeEvent, useState, useRef, useContext } from "react";
 import ReactDom from "react-dom";
 import "./personalInfo.scss";
 import i18next from "../../../i18n";
-
 import {
   Avatar,
-  // @ts-ignore
   rootStore,
   Icon,
   Modal,
   Input,
-  // @ts-ignore
   RootContext,
-} from "../../../UIKit/ChatUI";
+} from "easemob-chat-uikit";
 import { uploadImage } from "../../../service/avatar";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
@@ -52,7 +49,6 @@ const PersonalInfo = () => {
 
   const imageEl = useRef<HTMLInputElement>(null);
   const selectImage = () => {
-    console.log(123);
     imageEl.current?.focus();
     setTimeout(() => {
       imageEl.current?.click();
@@ -62,7 +58,6 @@ const PersonalInfo = () => {
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     let file = imageEl.current?.files?.[0];
-    console.log("file", file);
     const url = URL.createObjectURL(file as File);
     setImg(url);
     setCropModalOpen(true);
@@ -105,10 +100,13 @@ const PersonalInfo = () => {
   };
 
   const context = useContext(RootContext);
-  // @ts-ignore
-  const { theme } = context;
+  const { theme, presenceMap } = context;
   const themeMode = theme?.mode;
-
+  const myInfo =
+    rootStore.addressStore.appUsersInfo[rootStore.client.user] || {};
+  const presence = myInfo.isOnline
+    ? presenceMap?.[myInfo.presenceExt ?? ""] ?? presenceMap?.["Online"]
+    : presenceMap?.["Offline"];
   const handleCopy = () => {
     var textArea = document.createElement("textarea");
     textArea.value = rootStore.client.user;
@@ -138,6 +136,7 @@ const PersonalInfo = () => {
               src={addressStore.appUsersInfo[rootStore.client.user]?.avatarurl}
               size={100}
               shape={theme?.avatarShape}
+              presence={{ visible: true, icon: presence }}
             >
               {addressStore.appUsersInfo[rootStore.client.user]?.nickname}
             </Avatar>
@@ -146,7 +145,7 @@ const PersonalInfo = () => {
                 {addressStore.appUsersInfo[rootStore.client.user]?.nickname}
               </div>
               <div className={`${prefixCls}-header-id`}>
-                <div>{i18next.t("easemob")} ID:</div>
+                <div>{i18next.t("User")} ID:</div>
                 {rootStore.client.user}
                 <Icon
                   type="DOC_ON_DOC"
