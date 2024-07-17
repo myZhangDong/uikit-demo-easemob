@@ -1,17 +1,11 @@
 import React from "react";
-import {
-  HashRouter,
-  Route,
-  Routes,
-  BrowserRouter,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/login/login";
 // import Dev from "../pages/dev";
 import ChatApp from "../pages/main/main";
 import AuthCheck from "./authCheck";
-const Register = React.lazy(() => import("../pages/register/register"));
-const Dev = React.lazy(() => import("../pages/dev"));
+// const Register = React.lazy(() => import("../pages/register/register"));
+// const Dev = React.lazy(() => import("../pages/dev"));
 
 const AppRoutes = () => {
   return (
@@ -19,22 +13,22 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login></Login>} />
-        <Route
+        {/* <Route
           path="/dev"
           element={
             <React.Suspense fallback={<div>Loading...</div>}>
               <Dev></Dev>
             </React.Suspense>
           }
-        />
-        <Route
+        /> */}
+        {/* <Route
           path="register"
           element={
             <React.Suspense fallback={<div>Loading...</div>}>
               <Register></Register>
             </React.Suspense>
           }
-        ></Route>
+        ></Route> */}
         <Route
           path="/main"
           element={
@@ -43,7 +37,7 @@ const AppRoutes = () => {
             </AuthCheck>
           }
         />
-        <Route path="*" element={<div>走丢啦！</div>} />
+        <Route path="*" element={<div>Lost！</div>} />
       </Routes>
     </BrowserRouter>
   );

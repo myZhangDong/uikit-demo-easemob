@@ -1,11 +1,12 @@
 import axios from "axios";
 import { rootStore } from "easemob-chat-uikit";
+import { appServer } from "../config";
 export const uploadImage = (formData: FormData) => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + rootStore.client.context.accessToken;
   return axios
     .post(
-      `https://a1-appserver.easemob.com/inside/app/user/${rootStore.client.user}/avatar/upload`,
+      `${appServer}/app/chat/user/${rootStore.client.user}/avatar/upload`,
       formData,
       {
         headers: {
@@ -29,9 +30,7 @@ async function sendRequest(groupId: string) {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + rootStore.client.context.accessToken;
   return await axios
-    .get(
-      `https://a1-appserver.easemob.com/inside/app/group/${groupId}/avatarurl`
-    )
+    .get(`${appServer}/app/chat/group/${groupId}/avatarurl`)
     .then((response) => {
       return response.data.avatarUrl;
     })

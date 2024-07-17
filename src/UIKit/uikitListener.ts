@@ -36,6 +36,19 @@ const listener = (store: any) => {
     onCustomMessage: (message: any) => {
       notification("新消息", message, store);
     },
+
+    onContactAgreed: (data: any) => {
+      console.log("data", data);
+      const from =
+        rootStore.addressStore.appUsersInfo[data.from]?.nickname ?? data.from;
+      toast.success(`You have added ${from} as a contact.`);
+    },
+    onContactAdded: (data: any) => {
+      console.log("data", data);
+      const from =
+        rootStore.addressStore.appUsersInfo[data.from]?.nickname ?? data.from;
+      toast.success(`You have added ${from} as a contact.`);
+    },
   });
 
   eventHandler.addEventHandler("uikit", {

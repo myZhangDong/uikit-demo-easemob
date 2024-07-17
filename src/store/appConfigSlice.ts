@@ -4,7 +4,7 @@ import type { RootState } from "./store";
 import { GeneralConfig } from "../pages/settings/general/general";
 const initialState: GeneralConfig & { notification: boolean } = {
   language: "en", // window.navigator.language,
-  theme: "classic",
+  theme: "voyage",
   typing: true,
   dark: false,
   color: { h: 203, s: 1, l: 0.5, a: 1 },

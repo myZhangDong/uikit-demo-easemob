@@ -29,7 +29,7 @@ const About = () => {
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("SDK version")}</span>
+                <span>{i18next.t("SDK Version")}</span>
                 <div>{SDK_VERSION}</div>
               </div>
             </div>
@@ -42,50 +42,56 @@ const About = () => {
                 <div>{UIKIT_VERSION}</div>
               </div>
             </div>
-            {/* <div className={`${prefixCls}-content-item`}>
+            <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("officialWebsite")}</span>
-                <div>
-                  
+                <span>{i18next.t("Agora Chat documentation")}</span>
+                <div title="https://docs.agora.io/en/agora-chat/overview/product-overview?platform=web">
+                  <a href="https://docs.agora.io/en/agora-chat/overview/product-overview?platform=web">
+                    docs.agora.io/en
+                  </a>
                 </div>
               </div>
-            </div> */}
-            {/* <div className={`${prefixCls}-content-item`}>
+            </div>
+            <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("hotline")}</span>
-                <div>
-                  <a href=""></a>
+                <span>{i18next.t("Contact sales")}</span>
+                <div title="https://www.agora.io/en/talk-to-us/">
+                  <a href="https://www.agora.io/en/talk-to-us/">
+                    agora.io/en/talk-to-us
+                  </a>
                 </div>
               </div>
-            </div> */}
-            {/* <div className={`${prefixCls}-content-item`}>
+            </div>
+            <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("businessDevelopment")}</span>
-                <div>
-                  <a href=""></a>
+                <span>{i18next.t("Demo app github repo")}</span>
+                <div title="https://github.com/AgoraIO-Usecase/AgoraChat-web">
+                  <a href="https://github.com/AgoraIO-Usecase/AgoraChat-web">
+                    github.com/AgoraIO
+                  </a>
                 </div>
               </div>
-            </div> */}
-            {/* <div className={`${prefixCls}-content-item`}>
+            </div>
+            <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}
                 style={{ cursor: "default" }}
               >
-                <span>{i18next.t("channelCooperation")}</span>
-                <div>
-                  <a href=""></a>
+                <span>{i18next.t("More")}</span>
+                <div title="https://www.agora.io/en/">
+                  <a href="https://www.agora.io/en/">agora.io</a>
                 </div>
               </div>
-            </div> */}
+            </div>
             {/* <div className={`${prefixCls}-content-item`}>
               <div
                 className={`${prefixCls}-content-item-box`}

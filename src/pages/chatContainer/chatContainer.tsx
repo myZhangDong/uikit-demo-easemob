@@ -46,7 +46,9 @@ import classNames from "classnames";
 import i18next from "../../i18n";
 import { use } from "i18next";
 import { set } from "mobx";
+import { stat } from "fs";
 const ChatContainer = forwardRef((props, ref) => {
+  const state = useAppSelector((state) => state);
   const appConfig = useAppSelector((state) => state.appConfig);
   const [userSelectVisible, setUserSelectVisible] = useState(false); // 是否显示创建群组弹窗
   const [addContactVisible, setAddContactVisible] = useState(false); //是否显示添加联系人弹窗
@@ -59,7 +61,6 @@ const ChatContainer = forwardRef((props, ref) => {
   >({});
   const [contactListVisible, setContactListVisible] = useState(false); // 是否显示单条消息转发弹窗
   const [userInviteModalVisible, setUserInviteModalVisible] = useState(false); // 是否显示音视频邀请人员弹窗
-  const [agoraUuId, setAgoraUuId] = useState<string>(""); // 当前用户的音视频时的agoraUid
   const [joinedRtcRoomUsers, setJoinedRtcRoomUsers] = useState<
     { userId: string }[]
   >([]); // 已加入音视频房间的用户
@@ -95,7 +96,6 @@ const ChatContainer = forwardRef((props, ref) => {
     return getRtcChannelMembers({
       username: data.userId,
       channelName: data.channel,
-      appKey: appKey,
     }).then((res) => {
       return res;
     });
@@ -112,12 +112,11 @@ const ChatContainer = forwardRef((props, ref) => {
     return getRtcToken({
       channelName: data.channel,
       username: data.chatUserId,
-      appKey: appKey,
+      agoraUid: state.login.agoraUid,
     }).then((res) => {
-      const { agoraUserId, accessToken } = res;
-      setAgoraUuId(String(agoraUserId));
+      const { accessToken } = res;
       return {
-        agoraUid: agoraUserId,
+        agoraUid: state.login.agoraUid,
         accessToken,
       };
     });
@@ -276,7 +275,9 @@ const ChatContainer = forwardRef((props, ref) => {
                   placement: "bottomRight",
                 },
               }}
-              content={<div className="header-content">Chats</div>}
+              content={
+                <div className={`header-content ${themeMode}`}>Chats</div>
+              }
               avatar={<></>}
             ></Header>
           )}
@@ -344,6 +345,7 @@ const ChatContainer = forwardRef((props, ref) => {
                   forwardMsg.isChatThread = false;
                   forwardMsg.chatThreadOverview = undefined;
                   forwardMsg.chatThread = undefined;
+                  forwardMsg.time = Date.now();
                   // 复用合并转发的逻辑
                   setForwardedMessages(forwardMsg);
                   setContactListVisible(true);
@@ -355,20 +357,15 @@ const ChatContainer = forwardRef((props, ref) => {
                   icon: null,
                   actions: [
                     {
+                      content: "FORWARD",
+                      onClick: () => {},
+                    },
+                    {
                       content: "REPLY",
                       onClick: () => {},
                     },
                     {
-                      content: "DELETE",
-                      onClick: () => {},
-                    },
-                    {
                       content: "UNSEND",
-                      onClick: () => {},
-                    },
-                    {
-                      visible: appConfig.translation,
-                      content: "TRANSLATE",
                       onClick: () => {},
                     },
                     {
@@ -380,7 +377,12 @@ const ChatContainer = forwardRef((props, ref) => {
                       onClick: () => {},
                     },
                     {
-                      content: "FORWARD",
+                      content: "PIN",
+                      onClick: () => {},
+                    },
+                    {
+                      visible: appConfig.translation,
+                      content: "TRANSLATE",
                       onClick: () => {},
                     },
                     {
@@ -388,7 +390,7 @@ const ChatContainer = forwardRef((props, ref) => {
                       onClick: () => {},
                     },
                     {
-                      content: "PIN",
+                      content: "DELETE",
                       onClick: () => {},
                     },
                   ],
@@ -421,7 +423,7 @@ const ChatContainer = forwardRef((props, ref) => {
               onInvite: handleInviteUser,
 
               onRing: handleRing,
-              agoraUid: agoraUuId,
+              agoraUid: state.login.agoraUid ?? "",
               getIdMap: handleGetIdMap,
               onStateChange: handleRtcStateChange,
               appId: APP_ID,
@@ -612,6 +614,8 @@ const ChatContainer = forwardRef((props, ref) => {
               forwardedMessages.to = data.id;
               forwardedMessages.chatType =
                 data.type == "contact" ? "singleChat" : "groupChat";
+
+              console.log("转发消息", forwardedMessages);
               //@ts-ignore
               rootStore.messageStore.sendMessage(forwardedMessages);
               setContactListVisible(false);
@@ -620,11 +624,13 @@ const ChatContainer = forwardRef((props, ref) => {
                 selectable: false,
                 selectedMessage: [],
               });
+              console.log("data ---->", data);
               rootStore.conversationStore.setCurrentCvs({
                 chatType: data.type == "contact" ? "singleChat" : "groupChat",
                 conversationId: data.id,
                 //@ts-ignore
                 lastMessage: forwardedMessages,
+                name: data.name,
               });
             }}
           ></ContactList>

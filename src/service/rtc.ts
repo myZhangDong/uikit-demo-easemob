@@ -1,45 +1,36 @@
 import axios from "axios";
 import { rootStore } from "easemob-chat-uikit";
-
+import { appServer } from "../config";
 // username -> chat user id
-
 export const getRtcToken = (params: {
-  appKey: string;
   channelName: string | number;
   username: string;
+  agoraUid: string;
 }) => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + rootStore.client.context.accessToken;
-  let { username, channelName, appKey } = params;
-  return axios
-    .get(
-      `${
-        rootStore.client.apiUrl
-      }/token/rtcToken/v1?userAccount=${username}&channelName=${channelName}&appkey=${encodeURIComponent(
-        appKey
-      )}`
-    )
-    .then(function (response) {
-      return response.data;
-    });
+  let { username, channelName, agoraUid } = params;
+  // const url = `${appServer}/token/rtc/channel/${channelName}/agorauid/${agoraUid}?userAccount=${username}`;
+
+  const url = `${appServer}/app/chat/token/rtc/channel/${channelName}/agorauid/${agoraUid}?userAccount=${username}`;
+
+  return axios.get(url).then(function (response) {
+    return response.data;
+  });
 };
 
 export const getRtcChannelMembers = (params: {
   username: string;
   channelName: string;
-  appKey: string;
 }) => {
   axios.defaults.headers.common["Authorization"] =
     "Bearer " + rootStore.client.context.accessToken;
-  let { username, channelName, appKey } = params;
+  let { username, channelName } = params;
+
+  // const url = `${appServer}/agora/channel/mapper?channelName=${channelName}&userAccount=${username}`;
+  const url = `${appServer}/app/chat/agora/channel/mapper?channelName=${channelName}`;
   return axios
-    .get(
-      `${
-        rootStore.client.apiUrl
-      }/channel/mapper?userAccount=${username}&channelName=${channelName}&appkey=${encodeURIComponent(
-        appKey
-      )}`
-    )
+    .get(url)
     .then(function (response) {
       let members = response.data.result;
       console.log(members);

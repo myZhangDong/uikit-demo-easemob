@@ -13,6 +13,7 @@ import {
 import { use } from "i18next";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { on } from "events";
+import { observer } from "mobx-react-lite";
 interface Tab {
   title: React.ReactNode;
   icon: React.ReactNode;
@@ -61,6 +62,8 @@ const SettingTab = (props: SettingMenuProps) => {
 
   const [presenceModalOpen, setPresenceModalOpen] = useState(false);
   const [customPresenceExt, setCustomPresenceExt] = useState("");
+  const userInfo =
+    rootStore.addressStore.appUsersInfo[rootStore.client.user] || {};
   useEffect(() => {
     if (
       //@ts-ignore
@@ -74,9 +77,6 @@ const SettingTab = (props: SettingMenuProps) => {
           ?.presenceExt || ""
       );
     }
-
-    const userInfo =
-      rootStore.addressStore.appUsersInfo[rootStore.client.user] || {};
     setMenuTab((prev) => {
       let newMenuTab = new Map(prev);
       newMenuTab.set("presence", {
@@ -85,7 +85,8 @@ const SettingTab = (props: SettingMenuProps) => {
       });
       return newMenuTab;
     });
-  }, []);
+  }, [userInfo.presenceExt, userInfo.isOnline]);
+
   const setCustomPresence = () => {
     setPresenceModalOpen(false);
     setMenuTab((prev) => {
@@ -102,6 +103,7 @@ const SettingTab = (props: SettingMenuProps) => {
   const handlePresenceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomPresenceExt(e.target.value);
   };
+
   return (
     <div
       className={classNames("setting-tab", {
@@ -126,6 +128,7 @@ const SettingTab = (props: SettingMenuProps) => {
                           // 设置 open 属性
                           setMenuTab((prev) => {
                             let newMenuTab = new Map(prev);
+                            console.log("newMenuTab", newMenuTab);
                             newMenuTab.set(item.key, {
                               ...(prev.get(item.key) as Tab),
                               open: !prev.get(item.key)?.open,
@@ -210,7 +213,8 @@ const SettingTab = (props: SettingMenuProps) => {
                           >
                             <div className={`setting-menu-item-name-dropdown`}>
                               <div className="setting-menu-item-name-dropdown-value">
-                                {i18next.t(menuTab.get(item.key)?.value ?? "")}
+                                {menuTab &&
+                                  i18next.t(menuTab.get(item.key)?.value ?? "")}
                               </div>
                               <Icon
                                 style={{ cursor: "pointer" }}
@@ -284,4 +288,4 @@ const SettingTab = (props: SettingMenuProps) => {
     </div>
   );
 };
-export default SettingTab;
+export default observer(SettingTab);

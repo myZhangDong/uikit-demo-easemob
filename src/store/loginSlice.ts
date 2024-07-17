@@ -9,6 +9,7 @@ export const loginSlice = createSlice({
     chatToken: "",
     password: "",
     userId: "",
+    agoraUid: "",
     loggedIn: false,
     appKey: appKey,
     useDNS: true,
@@ -23,7 +24,11 @@ export const loginSlice = createSlice({
 
     loginWithToken: (
       state,
-      action: PayloadAction<{ userId: string; chatToken: string }>
+      action: PayloadAction<{
+        userId: string;
+        chatToken: string;
+        agoraUid: string;
+      }>
     ) => {
       const { client } = rootStore;
       console.log("client >>>", client);
@@ -35,6 +40,7 @@ export const loginSlice = createSlice({
       //设置 userId
       state.userId = action.payload.userId;
       state.chatToken = action.payload.chatToken;
+      state.agoraUid = action.payload.agoraUid;
     },
 
     loginWithPassword: (
@@ -62,6 +68,7 @@ export const loginSlice = createSlice({
             userId: state.userId,
             chatToken: state.chatToken,
             password: state.password,
+            agoraUid: state.agoraUid,
           })
         );
       }

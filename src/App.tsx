@@ -6,10 +6,8 @@ import { rootStore, Provider } from "easemob-chat-uikit";
 import "easemob-chat-uikit/style.css";
 import "./App.css";
 import AppRoutes from "./routes/routes";
-import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./store/store";
 import listener from "./UIKit/uikitListener";
-import { useSelector } from "react-redux";
 import i18next from "./i18n";
 import { useAppSelector, useAppDispatch } from "./hooks";
 import { updateAppConfig } from "./store/appConfigSlice";
@@ -30,7 +28,7 @@ const ChatApp: FC<any> = () => {
       item: {
         moreAction: true,
         deleteConversation: true,
-        presence: false,
+        presence: true,
       },
     },
     chat: {
@@ -73,7 +71,7 @@ const ChatApp: FC<any> = () => {
         item: {
           moreAction: true,
           deleteConversation: true,
-          presence: false,
+          presence: true,
         },
       },
 
@@ -107,9 +105,6 @@ const ChatApp: FC<any> = () => {
     <Provider
       initConfig={{
         appKey: loginState.appKey,
-        isHttpDNS: loginState.useDNS,
-        restUrl: serverConfig.rest,
-        msyncUrl: serverConfig.msync,
         useUserInfo: true,
         translationTargetLanguage: state.translationTargetLanguage,
       }}

@@ -36,9 +36,11 @@ import Settings from "../settings/settings";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import i18n from "../../i18n";
+import { loginWithToken, setSDKConfig } from "../../store/loginSlice";
 // @ts-ignore
 window.rootStore = rootStore;
 const ChatApp: FC<any> = () => {
+  const dispatch = useAppDispatch();
   const client = useClient();
   useEffect(() => {
     const webImAuth = sessionStorage.getItem("webImAuth");
@@ -48,6 +50,7 @@ const ChatApp: FC<any> = () => {
       userId: "",
       password: "",
       chatToken: "",
+      agoraUid: "",
     };
     if (webImAuth) {
       webImAuthObj = JSON.parse(webImAuth);
@@ -58,10 +61,17 @@ const ChatApp: FC<any> = () => {
         });
       } else {
         console.log("webimAuthObj", webImAuthObj);
-        client.open({
-          user: webImAuthObj.userId,
-          accessToken: webImAuthObj.chatToken,
-        });
+        dispatch(
+          loginWithToken({
+            userId: webImAuthObj.userId,
+            chatToken: webImAuthObj.chatToken,
+            agoraUid: webImAuthObj.agoraUid,
+          })
+        );
+        // client.open({
+        //   user: webImAuthObj.userId,
+        //   accessToken: webImAuthObj.chatToken,
+        // });
       }
     }
   }, [client]);
@@ -121,20 +131,19 @@ const ChatApp: FC<any> = () => {
         ref={navRef}
         tabs={[
           {
-            title: "消息",
+            title: "Message",
             icon: <Icon type="BUBBLE_FILL" width={28} height={28}></Icon>,
             content: <ChatContainer ref={chatContainerRef} />,
             unmountOnExit: false, // 当有音视频通话时切换后能保持音视频窗口不消失
           },
           {
-            title: "通讯录",
+            title: "Contacts",
             icon: (
               <Icon type="PERSON_DOUBLE_FILL" width={28} height={28}></Icon>
             ),
             content: (
               <Contacts
                 onMessageClick={() => {
-                  console.log("发消息");
                   navRef.current?.changeTab(0);
                 }}
                 onAudioCall={() => {
@@ -150,7 +159,7 @@ const ChatApp: FC<any> = () => {
             unmountOnExit: true,
           },
           {
-            title: "设置",
+            title: "Settings",
             icon: <Icon type="HAMBURGER" width={28} height={28}></Icon>,
             content: <Settings></Settings>,
             unmountOnExit: true,

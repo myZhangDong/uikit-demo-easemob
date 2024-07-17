@@ -10,6 +10,7 @@ import i18next from "../../i18n";
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { logout } from "../../store/loginSlice";
+import { PRESENCE_CONFIG } from "../../config";
 const Settings = () => {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -36,16 +37,9 @@ const Settings = () => {
               {
                 //@ts-ignore
                 icon: <Icon type="CIRCLE_N_DOT" width={24} height={24}></Icon>,
-                title: i18next.t("customStatus"),
+                title: i18next.t("status"),
                 key: "presence",
-                content: [
-                  "Online",
-                  "Offline",
-                  "Away",
-                  "Busy",
-                  "Do Not Disturb",
-                  "Custom",
-                ],
+                content: PRESENCE_CONFIG,
                 type: "menu",
               },
               {
@@ -105,6 +99,8 @@ const Settings = () => {
       ></SettingTab>
       <Modal
         open={logoutModalOpen}
+        okText={i18next.t("Confirm")}
+        cancelText={i18next.t("Cancel")}
         onCancel={() => {
           setLogoutModalOpen(false);
         }}

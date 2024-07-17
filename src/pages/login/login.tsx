@@ -75,13 +75,17 @@ const Login = () => {
       setIsLogging(false);
       return;
     }
-    getToken(values.userId, values.password)
+    getToken(values.userId.toLowerCase(), values.password)
       .then((res) => {
         console.log("res", res);
-        const { chatUserName, accessToken } = res.data;
+        const { chatUserName, accessToken, agoraUid } = res.data;
 
         dispatch(
-          loginWithToken({ userId: chatUserName, chatToken: accessToken })
+          loginWithToken({
+            userId: chatUserName.toLowerCase(),
+            chatToken: accessToken,
+            agoraUid: agoraUid,
+          })
         );
       })
       .catch(function (error) {
@@ -210,9 +214,6 @@ const Login = () => {
       <div className="login-copyright">
         {`© ${new Date().getFullYear()} Agora.io Inc, SDK Version: ${SDK_VERSION},  UIKit Version: ${UIKIT_VERSION},  Demo Version: ${DEMO_VERSION}`}{" "}
       </div>
-      <span onClick={goRegister} style={{ color: "#009eff" }}>
-        Go register
-      </span>
     </div>
   );
 };

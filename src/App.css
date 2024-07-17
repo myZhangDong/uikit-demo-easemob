@@ -67,6 +67,7 @@
 
 body{
   background-color: #d8dee5;
+  font-family: Roboto;
 }
 .add-contact{
   display: flex;
@@ -92,4 +93,11 @@ body{
   ::-webkit-scrollbar {
     width: 8px;
   }
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url('./font/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
