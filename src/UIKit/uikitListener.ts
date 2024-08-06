@@ -19,22 +19,22 @@ const listener = (store: any) => {
       dispatch(setLoggedIn(false));
     },
     onTextMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
     onImageMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
     onFileMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
     onAudioMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
     onVideoMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
     onCustomMessage: (message: any) => {
-      notification("新消息", message, store);
+      notification("New message", message, store);
     },
 
     onContactAgreed: (data: any) => {

@@ -23,16 +23,21 @@ const options = {
   //     }
   // ]
 };
+let hasRequestPermission = false;
 export const checkBrowerNotifyStatus = (
   showFlag: boolean,
   params: any,
   iconTitle: string,
   store: any
 ) => {
+  if (hasRequestPermission) {
+    return;
+  }
   if (!("Notification" in window)) {
     alert("This browser does not support desktop notification");
   } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then((e) => {
+      hasRequestPermission = true;
       if (e === "granted" && showFlag) {
         notification(params, iconTitle, store);
       } else if (e !== "granted") {
@@ -45,7 +50,7 @@ export const checkBrowerNotifyStatus = (
 };
 export const notification = (iconTitle: string, params: any, store: any) => {
   const config = { ...options, ...params };
-  if (Notification?.permission === "granted") {
+  
     const state = store.getState();
     const appConfig = state.appConfig;
     if (!appConfig.notification) return;
@@ -75,6 +80,7 @@ export const notification = (iconTitle: string, params: any, store: any) => {
     }
     const bodyList = config.body.split("?");
     config.body = bodyList[0];
+    if (Notification?.permission === "granted") {
     var notification = new Notification(config.title || "New Message", config);
     const session = {};
     notification.onclick = (res: any) => {

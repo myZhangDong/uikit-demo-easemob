@@ -327,6 +327,31 @@ const ChatContainer = forwardRef((props, ref) => {
                 // 单条转发
                 onForwardMessage: (msg: any) => {
                   let forwardMsg = { ...msg };
+                  if (forwardMsg.type === "video") {
+                    forwardMsg.body = {
+                      url: forwardMsg.url.split('?')[0],
+                      filename: forwardMsg.filename,
+                      secret: forwardMsg.secret,
+                      file_length: forwardMsg.file_length,
+                    };
+                    forwardMsg.thumb = "";
+                  } else if (forwardMsg.type === "audio") {
+                    forwardMsg.body = {
+                      url: forwardMsg.url,
+                      filename: forwardMsg.filename,
+                      secret: forwardMsg.secret,
+                      file_length: forwardMsg.file_length,
+                      length: forwardMsg.length,
+                    };
+                  } else if (forwardMsg.type === "file") {
+                    forwardMsg.body = {
+                      url: forwardMsg.url,
+                      filename: forwardMsg.filename,
+                      secret: forwardMsg.secret,
+                      file_length: forwardMsg.file_length,
+                    };
+                  }
+                  forwardMsg.file && delete forwardMsg.file;
                   forwardMsg.id = Date.now() + "";
                   forwardMsg.from = rootStore.client.user;
                   forwardMsg.ext = {
@@ -493,8 +518,33 @@ const ChatContainer = forwardRef((props, ref) => {
                   messageProps: {
                     // @ts-ignore
                     onForwardMessage: (msg: { [key: string]: any }) => {
-                      console.log("onForwardMessage --", msg);
+                      
                       let forwardMsg = { ...msg };
+                      if (forwardMsg.type === "video") {
+                        forwardMsg.body = {
+                          url: forwardMsg.url.split('?')[0],
+                          filename: forwardMsg.filename,
+                          secret: forwardMsg.secret,
+                          file_length: forwardMsg.file_length,
+                        };
+                        forwardMsg.thumb = "";
+                      } else if (forwardMsg.type === "audio") {
+                        forwardMsg.body = {
+                          url: forwardMsg.url,
+                          filename: forwardMsg.filename,
+                          secret: forwardMsg.secret,
+                          file_length: forwardMsg.file_length,
+                          length: forwardMsg.length,
+                        };
+                      } else if (forwardMsg.type === "file") {
+                        forwardMsg.body = {
+                          url: forwardMsg.url,
+                          filename: forwardMsg.filename,
+                          secret: forwardMsg.secret,
+                          file_length: forwardMsg.file_length,
+                        };
+                      }
+                      forwardMsg.file && delete forwardMsg.file;
                       // @ts-ignore
                       forwardMsg.id = Date.now() + "";
                       // @ts-ignore
@@ -582,7 +632,7 @@ const ChatContainer = forwardRef((props, ref) => {
         onCancel={() => {
           setUserSelectVisible(false);
         }}
-        onOk={() => {
+        onConfirm={() => {
           rootStore.addressStore.createGroup(
             selectedUsers.map((user) => user.userId)
           );
