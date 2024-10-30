@@ -52,7 +52,7 @@ const ChatApp: FC<any> = () => {
       chatToken: "",
       agoraUid: "",
     };
-    if (webImAuth) {
+    if (webImAuth && client.logOut) {
       webImAuthObj = JSON.parse(webImAuth);
       if (webImAuthObj.password) {
         client.open({
