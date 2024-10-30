@@ -8,7 +8,7 @@ import {
   // @ts-ignore
   rootStore,
   Input,
-} from "../../UIKit/ChatUI";
+} from "easemob-chat-uikit";
 import i18next from "../../i18n";
 import classNames from "classnames";
 import { useContext } from "react";
@@ -65,7 +65,7 @@ const UserInfo = (props: UserInfoProps) => {
 
   const silent = currentCvs[0]?.silent;
 
-  const isInBlocklist = addressStore.blockList.some((item) => {
+  const isInBlocklist = addressStore.blockList.some((item: any) => {
     return item === conversation.conversationId;
   });
 

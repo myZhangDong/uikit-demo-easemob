@@ -7,7 +7,7 @@ import {
   rootStore,
   // @ts-ignore
   useAddressContext,
-} from "../../UIKit/ChatUI";
+} from "easemob-chat-uikit";
 import toast from "react-hot-toast";
 const ALLOW_MAX_USER = 16;
 interface UserInviteModalProps {

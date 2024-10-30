@@ -9,8 +9,8 @@ import {
   useClient,
   Icon,
   eventHandler,
-} from "../../UIKit/ChatUI";
-import "../../UIKit/style.css";
+} from "easemob-chat-uikit";
+import "easemob-chat-uikit/style.css";
 import "./main.scss";
 import NavigationBar from "../../components/navigationBar/navigationBar";
 import ChatContainer from "../chatContainer/chatContainer";

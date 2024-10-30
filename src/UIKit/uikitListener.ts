@@ -1,5 +1,5 @@
 // @ts-ignore
-import { rootStore, eventHandler } from "./ChatUI";
+import { rootStore, eventHandler } from "easemob-chat-uikit";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn } from "../store/loginSlice";
 import { store } from "../store/store";
