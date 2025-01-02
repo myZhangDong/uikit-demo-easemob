@@ -6,7 +6,7 @@ import {
   rootStore,
   Avatar,
   RootContext,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import { useRef, useEffect, ChangeEvent, useState, useContext } from "react";
 import classNames from "classnames";
 import i18next from "../../i18n";

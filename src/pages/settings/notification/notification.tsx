@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./notification.scss";
 import i18next from "../../../i18n";
-import { Icon, Switch, RootContext } from "easemob-chat-uikit";
+import { Icon, Switch, RootContext } from "agora-chat-uikit";
 import classNames from "classnames";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { updateAppConfig } from "../../../store/appConfigSlice";

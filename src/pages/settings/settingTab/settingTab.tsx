@@ -9,7 +9,7 @@ import {
   Modal,
   Input,
   rootStore,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import { use } from "i18next";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { on } from "events";

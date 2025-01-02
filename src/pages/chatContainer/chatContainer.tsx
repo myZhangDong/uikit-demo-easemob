@@ -31,7 +31,7 @@ import {
   PinnedMessage,
   usePinnedMessage,
   RootContext,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import toast from "../../components/toast/toast";
 import { APP_ID, appKey } from "../../config";
 import { getRtcToken, getRtcChannelMembers } from "../../service/rtc";

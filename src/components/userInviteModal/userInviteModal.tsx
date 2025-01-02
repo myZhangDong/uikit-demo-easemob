@@ -4,7 +4,7 @@ import {
   UserSelect,
   rootStore,
   useAddressContext,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import toast from "react-hot-toast";
 const ALLOW_MAX_USER = 16;
 interface UserInviteModalProps {

@@ -1,4 +1,4 @@
-import { rootStore, eventHandler } from "easemob-chat-uikit";
+import { rootStore, eventHandler } from "agora-chat-uikit";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoggedIn } from "../store/loginSlice";
 import { store } from "../store/store";

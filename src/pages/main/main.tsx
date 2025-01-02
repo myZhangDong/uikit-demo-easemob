@@ -26,8 +26,8 @@ import {
   Tooltip,
   Button,
   Thread,
-} from "easemob-chat-uikit";
-import "easemob-chat-uikit/style.css";
+} from "agora-chat-uikit";
+import "agora-chat-uikit/style.css";
 import "./main.scss";
 import NavigationBar from "../../components/navigationBar/navigationBar";
 import ChatContainer from "../chatContainer/chatContainer";

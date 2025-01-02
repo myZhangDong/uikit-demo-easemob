@@ -5,7 +5,7 @@ import {
   Switch,
   RootContext,
   Blocklist as BlocklistUIKit,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import UserInfo from "../../../components/userInfo/userInfo";
 import classNames from "classnames";
 

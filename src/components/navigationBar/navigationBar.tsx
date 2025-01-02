@@ -15,7 +15,7 @@ import {
   RootContext,
   Modal,
   Input,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";
 import { useAppSelector } from "../../hooks";

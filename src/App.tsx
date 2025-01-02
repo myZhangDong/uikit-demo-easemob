@@ -2,8 +2,8 @@ import { useEffect, useState, FC } from "react";
 import "./index.css";
 import { observer } from "mobx-react-lite";
 import { Toaster } from "react-hot-toast";
-import { rootStore, Provider } from "easemob-chat-uikit";
-import "easemob-chat-uikit/style.css";
+import { rootStore, UIKitProvider } from "agora-chat-uikit";
+import "agora-chat-uikit/style.css";
 import "./App.css";
 import AppRoutes from "./routes/routes";
 import { store } from "./store/store";
@@ -102,7 +102,7 @@ const ChatApp: FC<any> = () => {
   const serverConfig = JSON.parse(localStorage.getItem("serverConfig") || "{}");
   console.log("app", loginState.useDNS, serverConfig);
   return (
-    <Provider
+    <UIKitProvider
       initConfig={{
         appKey: loginState.appKey,
         useUserInfo: true,
@@ -122,7 +122,7 @@ const ChatApp: FC<any> = () => {
     >
       <AppRoutes></AppRoutes>
       <Toaster></Toaster>
-    </Provider>
+    </UIKitProvider>
   );
 };
 

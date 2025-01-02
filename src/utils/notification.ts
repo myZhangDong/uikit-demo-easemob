@@ -1,4 +1,4 @@
-import { rootStore } from "easemob-chat-uikit";
+import { rootStore } from "agora-chat-uikit";
 const options = {
   requireInteraction: false, // 是否自动消失
   body: "new message", // 展示的具体内容

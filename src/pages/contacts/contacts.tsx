@@ -8,7 +8,7 @@ import {
   Input,
   rootStore,
   Button,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import "./contacts.scss";
 import toast from "../../components/toast/toast";
 import i18next from "../../i18n";

@@ -1,6 +1,6 @@
 import toast, { Toaster } from "react-hot-toast";
 import { ReactElement } from "react";
-import { Icon } from "easemob-chat-uikit";
+import { Icon } from "agora-chat-uikit";
 export { Toaster };
 const customToast: any = toast;
 

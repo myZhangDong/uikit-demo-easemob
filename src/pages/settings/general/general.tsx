@@ -6,7 +6,7 @@ import {
   Icon,
   Collapse,
   RootContext,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import React, { useState, useEffect, useContext } from "react";
 import { HuePicker } from "react-color";
 import "./general.scss";

@@ -1,6 +1,6 @@
 import "./settings.scss";
 import SettingTab from "./settingTab/settingTab";
-import { Icon, Modal } from "easemob-chat-uikit";
+import { Icon, Modal } from "agora-chat-uikit";
 import PersonalInfo from "./personalInfo/personalInfo";
 import Notification from "./notification/notification";
 import About from "./about/about";

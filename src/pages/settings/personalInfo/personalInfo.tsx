@@ -9,7 +9,7 @@ import {
   Modal,
   Input,
   RootContext,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import { uploadImage } from "../../../service/avatar";
 import { observer } from "mobx-react-lite";
 import classNames from "classnames";

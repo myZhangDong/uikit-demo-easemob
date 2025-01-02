@@ -1,5 +1,5 @@
 import axios from "axios";
-import { rootStore } from "easemob-chat-uikit";
+import { rootStore } from "agora-chat-uikit";
 import { appServer } from "../config";
 export const uploadImage = (formData: FormData) => {
   axios.defaults.headers.common["Authorization"] =

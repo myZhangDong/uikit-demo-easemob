@@ -6,7 +6,7 @@ import {
   Modal,
   rootStore,
   Input,
-} from "easemob-chat-uikit";
+} from "agora-chat-uikit";
 import i18next from "../../i18n";
 import classNames from "classnames";
 import { useContext } from "react";
