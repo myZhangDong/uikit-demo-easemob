@@ -8,6 +8,7 @@ import {
   Input,
   rootStore,
   Button,
+  Empty,
 } from "agora-chat-uikit";
 import "./contacts.scss";
 import toast from "../../components/toast/toast";
@@ -32,7 +33,6 @@ const Contacts = ({
 
   const [userId, setUserId] = useState("");
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setUserId(e.target.value);
   };
   return (
@@ -49,27 +49,21 @@ const Contacts = ({
                   title={i18next.t("addContact")}
                   style={{ cursor: "pointer" }}
                 >
-                  <Button type="text" shape="circle">
-                    <Icon
-                      type="PERSON_ADD"
-                      width={24}
-                      height={24}
-                      onClick={() => {
-                        setAddContactVisible(true);
-                      }}
-                    ></Icon>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    onClick={() => {
+                      setAddContactVisible(true);
+                    }}
+                  >
+                    <Icon type="PERSON_ADD" width={24} height={24}></Icon>
                   </Button>
                 </div>
               }
             ></Header>
           }
-          // className="conversation"
           onItemClick={(data) => {
             let type = data.type;
-            // if (data.type == "request") {
-            //   type = "contact";
-            // }
-            console.log("点击联系人", data);
             setContactData({
               id: data.id,
               name: data.name,
@@ -86,20 +80,26 @@ const Contacts = ({
             onMessageClick?.();
           }}
           onVideoCall={() => {
-            console.log("onVideoCall");
             onVideoCall?.();
           }}
           onAudioCall={() => {
-            console.log("onAudioCall");
             onAudioCall?.();
           }}
           onUserIdCopied={(userId) => {
             toast.success(i18next.t("copySuccess"));
           }}
+          renderEmpty={() => {
+            return (
+              <Empty
+                text=""
+                icon={<Icon type="EMPTY" width={120} height={120}></Icon>}
+              />
+            );
+          }}
         ></ContactDetail>
       </div>
 
-      {/** 添加联系人弹窗 */}
+      {/** Modal for adding contacts */}
       <Modal
         open={addContactVisible}
         onCancel={() => {

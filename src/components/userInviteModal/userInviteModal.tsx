@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  UserSelect,
-  rootStore,
-  useAddressContext,
-} from "agora-chat-uikit";
-import toast from "react-hot-toast";
+import { UserSelect, rootStore, useAddressContext } from "agora-chat-uikit";
+// The maximum number of people allowed for group audio and video calls
 const ALLOW_MAX_USER = 16;
 interface UserInviteModalProps {
   onClose?: () => void;
@@ -44,7 +39,7 @@ const UserInviteModal = (props: UserInviteModalProps) => {
 
   const rtcGroup = rootStore.addressStore.groups.filter((item) => {
     // @ts-ignore
-    return item.groupid == groupId;
+    return item.groupid === groupId;
   });
   const getGroupMembers = (groupId: string) => {
     if (rtcGroup.length > 0) {
@@ -74,7 +69,6 @@ const UserInviteModal = (props: UserInviteModalProps) => {
           rootStore.addressStore.appUsersInfo[item.userId]?.avatarurl;
         return member;
       });
-      console.log("members >>>", members);
       setUsers(members as any as UserInfo[]);
     }
   };
@@ -85,7 +79,6 @@ const UserInviteModal = (props: UserInviteModalProps) => {
     }
   }, [groupId, visible, rtcGroup?.[0]?.members?.length]);
 
-  console.log("checkedUsers", checkedUsers);
   return (
     <UserSelect
       title={title}
@@ -103,7 +96,6 @@ const UserInviteModal = (props: UserInviteModalProps) => {
                 };
               })
             : [];
-        console.log("contacts", contacts);
         onInvite?.(contacts);
       }}
       enableMultipleSelection

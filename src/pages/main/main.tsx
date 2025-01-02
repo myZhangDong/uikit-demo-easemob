@@ -52,7 +52,8 @@ const ChatApp: FC<any> = () => {
       chatToken: "",
       agoraUid: "",
     };
-    if (webImAuth && client.logOut) {
+    // Automatically log in when refreshing the webpage
+    if (webImAuth && !client.token) {
       webImAuthObj = JSON.parse(webImAuth);
       if (webImAuthObj.password) {
         client.open({
@@ -60,7 +61,6 @@ const ChatApp: FC<any> = () => {
           pwd: webImAuthObj.password,
         });
       } else {
-        console.log("webimAuthObj", webImAuthObj);
         dispatch(
           loginWithToken({
             userId: webImAuthObj.userId,

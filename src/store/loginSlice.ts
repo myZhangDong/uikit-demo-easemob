@@ -31,8 +31,6 @@ export const loginSlice = createSlice({
       }>
     ) => {
       const { client } = rootStore;
-      console.log("client >>>", client);
-      console.log("loginWithToken", action.payload);
       client.open({
         user: action.payload.userId,
         agoraToken: action.payload.chatToken,
@@ -48,8 +46,6 @@ export const loginSlice = createSlice({
       action: PayloadAction<{ userId: string; password: string }>
     ) => {
       const { client } = rootStore;
-      console.log("client >>>", client);
-      console.log("loginWithPassword", action.payload);
       client.open({
         user: action.payload.userId,
         pwd: action.payload.password,

@@ -69,7 +69,6 @@ const Login = () => {
   };
 
   const login = () => {
-    console.log("调用登录");
     setIsLogging(true);
     if (!values.userId || !values.password) {
       toast.error(i18next.t("Please enter the correct username and password"));
@@ -78,9 +77,8 @@ const Login = () => {
     }
     getToken(values.userId.toLowerCase(), values.password)
       .then((res) => {
-        console.log("res", res);
         const { chatUserName, accessToken, agoraUid } = res.data;
-        console.log("获取 token 成功");
+        console.log("获取 token 成功", res);
         dispatch(
           loginWithToken({
             userId: chatUserName.toLowerCase(),

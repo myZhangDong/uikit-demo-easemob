@@ -106,6 +106,7 @@
         "account": "Account",
         "contacts": "Contacts",
         "enterUserID": "User ID",
+        "UserID": "User ID",
         "add": "Add",
         "cancel": "Cancel",
         "done": "Done",

@@ -40,6 +40,12 @@ const CreateChat = (props: CreateChatProps) => {
         return contact.remark.includes(e.target.value);
       } else if (contact.nickname) {
         return contact.nickname.includes(e.target.value);
+      } else if (
+        rootStore.addressStore.appUsersInfo[contact.userId]?.nickname
+      ) {
+        return rootStore.addressStore.appUsersInfo[
+          contact.userId
+        ]?.nickname.includes(e.target.value);
       } else {
         return contact.userId.includes(e.target.value);
       }
@@ -109,14 +115,22 @@ const CreateChat = (props: CreateChatProps) => {
                       chatType: "singleChat",
                       conversationId: contact.userId,
                       name:
-                        contact.remark || contact.nickname || contact.userId,
+                        contact.remark ||
+                        contact.nickname ||
+                        rootStore.addressStore.appUsersInfo[contact.userId]
+                          ?.nickname ||
+                        contact.userId,
                       lastMessage: {} as never,
                       unreadCount: 0,
                     });
                     rootStore.conversationStore.setCurrentCvs({
                       chatType: "singleChat",
                       name:
-                        contact.remark || contact.nickname || contact.userId,
+                        contact.remark ||
+                        contact.nickname ||
+                        rootStore.addressStore.appUsersInfo[contact.userId]
+                          ?.nickname ||
+                        contact.userId,
                       conversationId: contact.userId,
                       unreadCount: 0,
                     });
@@ -130,10 +144,18 @@ const CreateChat = (props: CreateChatProps) => {
                     }
                     size={24}
                   >
-                    {contact.remark || contact.nickname || contact.userId}
+                    {contact.remark ||
+                      contact.nickname ||
+                      rootStore.addressStore.appUsersInfo[contact.userId]
+                        ?.nickname ||
+                      contact.userId}
                   </Avatar>
                   <div className={classNames("search-content-item-name")}>
-                    {contact.remark || contact.nickname || contact.userId}
+                    {contact.remark ||
+                      contact.nickname ||
+                      rootStore.addressStore.appUsersInfo[contact.userId]
+                        ?.nickname ||
+                      contact.userId}
                   </div>
                 </div>
               );

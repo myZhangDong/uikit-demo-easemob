@@ -31,6 +31,7 @@ import {
   PinnedMessage,
   usePinnedMessage,
   RootContext,
+  Empty
 } from "agora-chat-uikit";
 import toast from "../../components/toast/toast";
 import { APP_ID, appKey } from "../../config";
@@ -44,9 +45,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks";
 import CreateChat from "./createChat";
 import classNames from "classnames";
 import i18next from "../../i18n";
-import { use } from "i18next";
-import { set } from "mobx";
-import { stat } from "fs";
+import chats from "../../assets/chats@2x.png";
 const ChatContainer = forwardRef((props, ref) => {
   const state = useAppSelector((state) => state);
   const appConfig = useAppSelector((state) => state.appConfig);
@@ -206,6 +205,26 @@ const ChatContainer = forwardRef((props, ref) => {
       setConversationDetailVisible(false);
     }
   }, [thread.showThreadPanel]);
+
+  // Click on the blank area to close the conversation details
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const [groupMemberVisible, setGroupMemberVisible] = useState(false);
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (detailsRef.current && !detailsRef.current.contains(event.target)) {
+        setConversationDetailVisible(false);
+      }
+    };
+
+    if (!groupMemberVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [detailsRef, groupMemberVisible]);
+
   return (
     <div
       className={classNames("chat-container", {
@@ -276,7 +295,9 @@ const ChatContainer = forwardRef((props, ref) => {
                 },
               }}
               content={
-                <div className={`header-content ${themeMode}`}>Chats</div>
+                <div className={`header-content ${themeMode}`}>
+                  <img className="header-img" src={chats} alt="" />
+                </div>
               }
               avatar={<></>}
             ></Header>
@@ -329,7 +350,7 @@ const ChatContainer = forwardRef((props, ref) => {
                   let forwardMsg = { ...msg };
                   if (forwardMsg.type === "video") {
                     forwardMsg.body = {
-                      url: forwardMsg.url.split('?')[0],
+                      url: forwardMsg.url.split("?")[0],
                       filename: forwardMsg.filename,
                       secret: forwardMsg.secret,
                       file_length: forwardMsg.file_length,
@@ -471,11 +492,19 @@ const ChatContainer = forwardRef((props, ref) => {
               },
               groupAvatar: groupAvatar,
             }}
+            renderEmpty={() => {
+              return (
+                <Empty
+                  text=""
+                  icon={<Icon type="EMPTY" width={120} height={120}></Icon>}
+                ></Empty>
+              );
+            }}
           ></Chat>
 
           {/** 是否显示群组设置 */}
           {conversationDetailVisible && (
-            <div className="chat-container-chat-right">
+            <div className="chat-container-chat-right" ref={detailsRef}>
               {cvsItem.chatType == "groupChat" ? (
                 <GroupDetail
                   conversation={{
@@ -492,10 +521,15 @@ const ChatContainer = forwardRef((props, ref) => {
                   groupMemberProps={{
                     onPrivateChat: () => {
                       setConversationDetailVisible(false);
+                      setGroupMemberVisible(false);
                     },
-                    // onAddContact: () => {
-                    //   toast.success("Friend request sent");
-                    // },
+                    onAddContact: () => {
+                      toast.success("Friend request sent");
+                      setGroupMemberVisible(false);
+                    },
+                  }}
+                  onGroupMemberVisibleChange={(visible: boolean) => {
+                    setGroupMemberVisible(visible);
                   }}
                   onUserIdCopied={() => {
                     toast.success(i18next.t("copied"));
@@ -518,11 +552,10 @@ const ChatContainer = forwardRef((props, ref) => {
                   messageProps: {
                     // @ts-ignore
                     onForwardMessage: (msg: { [key: string]: any }) => {
-                      
                       let forwardMsg = { ...msg };
                       if (forwardMsg.type === "video") {
                         forwardMsg.body = {
-                          url: forwardMsg.url.split('?')[0],
+                          url: forwardMsg.url.split("?")[0],
                           filename: forwardMsg.filename,
                           secret: forwardMsg.secret,
                           file_length: forwardMsg.file_length,
