@@ -8,7 +8,7 @@ import General from "./general/general";
 import Blocklist from "./blocklist/blocklist";
 import i18next from "../../i18n";
 import { useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { logout } from "../../store/loginSlice";
 import { PRESENCE_CONFIG } from "../../config";
 const Settings = () => {

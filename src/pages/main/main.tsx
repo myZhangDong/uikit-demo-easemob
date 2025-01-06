@@ -1,32 +1,7 @@
-import { useEffect, useState, FC, useRef } from "react";
-// import "./index.css";
+import { useEffect, FC, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import toast, { Toaster } from "react-hot-toast";
-import {
-  Chat,
-  GroupDetail,
-  ContactList,
-  ContactDetail,
-  Header,
-  rootStore,
-  ConversationList,
-  Provider,
-  useClient,
-  Icon,
-  Avatar,
-  MessageList,
-  useConversationContext,
-  useChatContext,
-  UserSelect,
-  TextMessage,
-  GroupMember,
-  Modal,
-  Input,
-  eventHandler,
-  Tooltip,
-  Button,
-  Thread,
-} from "agora-chat-uikit";
+import toast from "react-hot-toast";
+import { useClient, Icon, eventHandler } from "agora-chat-uikit";
 import "agora-chat-uikit/style.css";
 import "./main.scss";
 import NavigationBar from "../../components/navigationBar/navigationBar";
@@ -36,16 +11,14 @@ import Settings from "../settings/settings";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import i18n from "../../i18n";
-import { loginWithToken, setSDKConfig } from "../../store/loginSlice";
-// @ts-ignore
-window.rootStore = rootStore;
+import { loginWithToken } from "../../store/loginSlice";
+
 const ChatApp: FC<any> = () => {
   const dispatch = useAppDispatch();
   const client = useClient();
   useEffect(() => {
     const webImAuth = sessionStorage.getItem("webImAuth");
 
-    console.log("webImAuth", webImAuth);
     let webImAuthObj = {
       userId: "",
       password: "",
@@ -68,13 +41,10 @@ const ChatApp: FC<any> = () => {
             agoraUid: webImAuthObj.agoraUid,
           })
         );
-        // client.open({
-        //   user: webImAuthObj.userId,
-        //   accessToken: webImAuthObj.chatToken,
-        // });
       }
     }
   }, [client]);
+
   const state = useAppSelector((state) => state.login);
   const navigate = useNavigate();
   useEffect(() => {
@@ -82,46 +52,6 @@ const ChatApp: FC<any> = () => {
       navigate("/login");
     }
   }, [state.loggedIn]);
-
-  useEffect(() => {
-    eventHandler.addEventHandler("chatroom", {
-      onError: (err) => {
-        console.error(err);
-      },
-      recallMessage: {
-        success: () => {
-          toast.success(i18n.t("Recall message successfully"));
-        },
-        error: (error) => {
-          toast.error(i18n.t("Recall message failed"));
-        },
-      },
-      reportMessage: {
-        success: () => {
-          toast.success(i18n.t("Reported successfully"));
-        },
-        error: (error) => {
-          toast.error(i18n.t("Report failed"));
-        },
-      },
-      sendMessage: {
-        error: (error) => {
-          if (error.type == 507) {
-            toast.error(i18n.t("You have been banned from sending messages"));
-          } else if (
-            error.type == 602 &&
-            error.message == "not in group or chatroom"
-          ) {
-            toast.error(
-              i18n.t(
-                "Message sending failed, you are no longer in the current group"
-              )
-            );
-          }
-        },
-      },
-    });
-  }, []);
 
   const navRef = useRef<any>(null);
   const chatContainerRef = useRef<any>(null);
@@ -134,7 +64,7 @@ const ChatApp: FC<any> = () => {
             title: "Message",
             icon: <Icon type="BUBBLE_FILL" width={28} height={28}></Icon>,
             content: <ChatContainer ref={chatContainerRef} />,
-            unmountOnExit: false, // 当有音视频通话时切换后能保持音视频窗口不消失
+            unmountOnExit: false, // Ensure the audio/video call window remains visible when switching.
           },
           {
             title: "Contacts",

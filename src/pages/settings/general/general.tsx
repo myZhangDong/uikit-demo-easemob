@@ -1,12 +1,5 @@
 import i18next from "../../../i18n";
-import {
-  Switch,
-  Tooltip,
-  Button,
-  Icon,
-  Collapse,
-  RootContext,
-} from "agora-chat-uikit";
+import { Switch, Tooltip, Icon, RootContext } from "agora-chat-uikit";
 import React, { useState, useEffect, useContext } from "react";
 import { HuePicker } from "react-color";
 import "./general.scss";
@@ -70,13 +63,11 @@ const General = () => {
       setGeneralConfig(config);
       localStorage.setItem("generalConfig", JSON.stringify(config));
     };
-  let themeMode = "light";
 
-  // --- 主题切换 ---
+  // --- switch theme ---
   const themes: ["classic", "voyage"] = ["classic", "voyage"];
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const setTheme = (theme: "classic" | "voyage") => {
-    console.log("setTheme", theme);
     setGeneralConfig({
       ...generalConfig,
       theme,
@@ -91,7 +82,7 @@ const General = () => {
     <ul className={`cui-header-more`}>
       {themes.map((theme, index) => (
         <li
-          className={appThemeMode == "dark" ? "cui-li-dark" : ""}
+          className={appThemeMode === "dark" ? "cui-li-dark" : ""}
           style={{
             width: "212px",
             display: "flex",
@@ -103,7 +94,7 @@ const General = () => {
           }}
         >
           {i18next.t(theme)}
-          {generalConfig.theme == theme && (
+          {generalConfig.theme === theme && (
             <Icon type="CHECK" width={14} height={14}></Icon>
           )}
         </li>
@@ -111,13 +102,12 @@ const General = () => {
     </ul>
   );
 
-  // --- 颜色设置 ---
+  // --- Color Settings ---
   const [colorSettingVisible, setColorSettingVisible] = useState(false);
   const handleColorSettingClick = () => {
     setColorSettingVisible((colorSettingVisible) => !colorSettingVisible);
   };
   const setColor = (color: any) => {
-    console.log("color", color);
     setGeneralConfig({
       ...generalConfig,
       color: color.hsl,
@@ -139,13 +129,13 @@ const General = () => {
     </div>
   );
 
-  // --- 特性开关 ---
+  // --- Feature Toggle ---
   const [featureSettingVisible, setFeatureSettingVisible] = useState(false);
   const handleFeatureSettingClick = () => {
     setFeatureSettingVisible((featureSettingVisible) => !featureSettingVisible);
   };
 
-  // --- 国际化语言设置 ---
+  // ---  Language Settings ---
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const langs = ["zh", "en"];
   const setLanguage = (lang: string) => {
@@ -164,7 +154,7 @@ const General = () => {
     <ul className={`cui-header-more`}>
       {langs.map((lang, index) => (
         <li
-          className={appThemeMode == "dark" ? "cui-li-dark" : ""}
+          className={appThemeMode === "dark" ? "cui-li-dark" : ""}
           style={{
             width: "212px",
             display: "flex",
@@ -176,7 +166,7 @@ const General = () => {
           }}
         >
           {i18next.t(lang)}
-          {generalConfig.language == lang && (
+          {generalConfig.language === lang && (
             <Icon type="CHECK" width={14} height={14}></Icon>
           )}
         </li>
@@ -184,7 +174,7 @@ const General = () => {
     </ul>
   );
 
-  // --- 翻译目标语言设置 ---
+  // --- Translation Target Language Settings ---
   const [translationLangMenuOpen, setTranslationLangMenuOpen] = useState(false);
 
   const [translationTargetLang, setTranslationTargetLang] = useState<{
@@ -207,7 +197,7 @@ const General = () => {
     >
       {generalConfig.translationSupportedLanguages.map((lang, index) => (
         <li
-          className={appThemeMode == "dark" ? "cui-li-dark" : ""}
+          className={appThemeMode === "dark" ? "cui-li-dark" : ""}
           style={{
             width: "212px",
             display: "flex",
@@ -229,7 +219,7 @@ const General = () => {
           }}
         >
           {lang.nativeName}
-          {generalConfig.translationTargetLanguage == lang.code && (
+          {generalConfig.translationTargetLanguage === lang.code && (
             <Icon type="CHECK" width={14} height={14}></Icon>
           )}
         </li>
@@ -242,7 +232,6 @@ const General = () => {
       return;
     }
     client.getSupportedLanguages().then((res: any) => {
-      console.log("getSupportedLanguages", res);
       const languages: { code: string; nativeName: string; name: string }[] =
         res.data;
       dispatch(
@@ -273,7 +262,7 @@ const General = () => {
           <div
             className="user-info-content"
             style={{
-              backgroundColor: appThemeMode == "dark" ? "#171A1C" : "#F9FAFA",
+              backgroundColor: appThemeMode === "dark" ? "#171A1C" : "#F9FAFA",
             }}
           >
             <div className={`${prefixCls}-content-item`}>
@@ -332,7 +321,7 @@ const General = () => {
                       <div>{i18next.t(generalConfig.theme)}</div>
                       <Icon
                         type={themeMenuOpen ? "ARROW_UP" : "ARROW_DOWN"}
-                        color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                        color={appThemeMode === "dark" ? "#C8CDD0" : "#464E53"}
                         width={24}
                         height={24}
                       ></Icon>
@@ -350,7 +339,7 @@ const General = () => {
 
                 <Icon
                   type={colorSettingVisible ? "ARROW_UP" : "ARROW_DOWN"}
-                  color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                  color={appThemeMode === "dark" ? "#C8CDD0" : "#464E53"}
                   width={24}
                   height={24}
                 ></Icon>
@@ -387,7 +376,7 @@ const General = () => {
                 <span>{i18next.t("featuresConsole")}</span>
                 <Icon
                   type={featureSettingVisible ? "ARROW_UP" : "ARROW_DOWN"}
-                  color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                  color={appThemeMode === "dark" ? "#C8CDD0" : "#464E53"}
                   width={24}
                   height={24}
                 ></Icon>
@@ -517,7 +506,7 @@ const General = () => {
                         type={
                           translationLangMenuOpen ? "ARROW_UP" : "ARROW_DOWN"
                         }
-                        color={appThemeMode == "dark" ? "#C8CDD0" : "#464E53"}
+                        color={appThemeMode === "dark" ? "#C8CDD0" : "#464E53"}
                         width={24}
                         height={24}
                       ></Icon>

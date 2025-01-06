@@ -31,7 +31,7 @@ import {
   PinnedMessage,
   usePinnedMessage,
   RootContext,
-  Empty
+  Empty,
 } from "agora-chat-uikit";
 import toast from "../../components/toast/toast";
 import { APP_ID, appKey } from "../../config";
@@ -187,8 +187,6 @@ const ChatContainer = forwardRef((props, ref) => {
     }
   }, [rootStore.conversationStore.currentCvs]);
 
-  console.log("appConfig ---", appConfig);
-
   // ---- pin message ----
   const { visible: pinMsgVisible, hide: hidePinMsg } = usePinnedMessage();
 
@@ -328,7 +326,7 @@ const ChatContainer = forwardRef((props, ref) => {
             />
           )}
           <Chat
-            // MessageList 使用mome缓存了消息组件，修改这些控制显示开关时需要重新渲染组件
+            // The MessageList uses Memo to cache message components, and modifying these control display switches requires re rendering the components
             key={
               appConfig.reaction.toString() +
               appConfig.thread.toString() +
@@ -345,7 +343,7 @@ const ChatContainer = forwardRef((props, ref) => {
                 return null;
               },
               messageProps: {
-                // 单条转发
+                // Single forwarding
                 onForwardMessage: (msg: any) => {
                   let forwardMsg = { ...msg };
                   if (forwardMsg.type === "video") {
@@ -392,7 +390,7 @@ const ChatContainer = forwardRef((props, ref) => {
                   forwardMsg.chatThreadOverview = undefined;
                   forwardMsg.chatThread = undefined;
                   forwardMsg.time = Date.now();
-                  // 复用合并转发的逻辑
+                  // The logic of reusing, merging, and forwarding
                   setForwardedMessages(forwardMsg);
                   setContactListVisible(true);
                 },
@@ -446,7 +444,7 @@ const ChatContainer = forwardRef((props, ref) => {
             messageInputProps={{
               enabledTyping: true,
               onSendMessage: (msg) => {
-                // 发送消息回调，如果是合并转发的消息，显示转发弹窗
+                // Send a message callback, if it is a merged forwarded message, display a forwarding pop-up window
                 // @ts-ignore
                 if (msg.type == "combine") {
                   setForwardedMessages(msg);
@@ -456,7 +454,7 @@ const ChatContainer = forwardRef((props, ref) => {
             }}
             headerProps={{
               moreAction: {
-                // 关闭默认行为，自定义更多操作
+                // Disable default behavior and customize more actions
                 visible: true,
                 actions: [],
               },
@@ -476,7 +474,6 @@ const ChatContainer = forwardRef((props, ref) => {
               getRTCToken: getRtcToken2,
               //@ts-ignore
               onAddPerson: (data: any) => {
-                console.log("onAddPerson", data);
                 setMediaType(data.type === 2 ? "video" : "audio");
                 setRtcGroupId(data.groupId);
                 setUserInviteModalVisible(true);
@@ -502,7 +499,7 @@ const ChatContainer = forwardRef((props, ref) => {
             }}
           ></Chat>
 
-          {/** 是否显示群组设置 */}
+          {/** Whether to display group settings */}
           {conversationDetailVisible && (
             <div className="chat-container-chat-right" ref={detailsRef}>
               {cvsItem.chatType == "groupChat" ? (
@@ -541,7 +538,7 @@ const ChatContainer = forwardRef((props, ref) => {
             </div>
           )}
         </div>
-        {/** 是否显示子区 */}
+        {/** Whether to display thread*/}
         {thread.showThreadPanel &&
           !pinMsgVisible &&
           !conversationDetailVisible && (
@@ -639,7 +636,6 @@ const ChatContainer = forwardRef((props, ref) => {
                 }}
                 messageInputProps={{
                   onSendMessage: (msg: any) => {
-                    console.log("message", msg);
                     if (msg.type == "combine") {
                       setForwardedMessages(msg);
                       setContactListVisible(true);
@@ -651,7 +647,7 @@ const ChatContainer = forwardRef((props, ref) => {
             </div>
           )}
 
-        {/** 是否显示 pin message*/}
+        {/** Whether to display pin messages*/}
         {pinMsgVisible &&
           !thread.showThreadPanel &&
           !conversationDetailVisible && (
@@ -660,7 +656,7 @@ const ChatContainer = forwardRef((props, ref) => {
             </div>
           )}
       </div>
-      {/** 创建群组的联系人弹窗 */}
+      {/** Contact pop-up window for creating groups */}
       <UserSelect
         onCancel={() => {
           setUserSelectVisible(false);
@@ -678,7 +674,7 @@ const ChatContainer = forwardRef((props, ref) => {
         }}
         open={userSelectVisible}
       ></UserSelect>
-      {/** 转发消息的联系人弹窗 */}
+      {/** Contact pop-up for forwarding messages */}
       <Modal
         open={contactListVisible}
         closable={false}
@@ -698,7 +694,6 @@ const ChatContainer = forwardRef((props, ref) => {
               forwardedMessages.chatType =
                 data.type == "contact" ? "singleChat" : "groupChat";
 
-              console.log("转发消息", forwardedMessages);
               //@ts-ignore
               rootStore.messageStore.sendMessage(forwardedMessages);
               setContactListVisible(false);
@@ -707,7 +702,6 @@ const ChatContainer = forwardRef((props, ref) => {
                 selectable: false,
                 selectedMessage: [],
               });
-              console.log("data ---->", data);
               rootStore.conversationStore.setCurrentCvs({
                 chatType: data.type == "contact" ? "singleChat" : "groupChat",
                 conversationId: data.id,
@@ -719,7 +713,7 @@ const ChatContainer = forwardRef((props, ref) => {
           ></ContactList>
         </div>
       </Modal>
-      {/** 添加联系人弹窗 */}
+      {/** Add contact Modal */}
       <Modal
         open={addContactVisible}
         onCancel={() => {
@@ -743,7 +737,7 @@ const ChatContainer = forwardRef((props, ref) => {
           </div>
         </>
       </Modal>
-      {/** 音视频邀请用户组件 */}
+      {/** Audio and video invitation user component */}
       <UserInviteModal
         title={
           mediaType === "audio"

@@ -1,8 +1,5 @@
 import {
   Input,
-  ContactList,
-  Popover,
-  Tooltip,
   rootStore,
   Avatar,
   RootContext,
@@ -28,8 +25,6 @@ const CreateChat = (props: CreateChatProps) => {
     { nickname: string; remark?: string; userId: string; silent?: boolean }[]
   >([]);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value, contacts);
-
     if (e.target.value.length > 0) {
       setShowSearch(true);
     } else {
@@ -69,7 +64,7 @@ const CreateChat = (props: CreateChatProps) => {
   return (
     <div
       className={classNames("create-chat-container", {
-        "create-chat-container-dark": themeMode == "dark",
+        "create-chat-container-dark": themeMode === "dark",
       })}
     >
       <header>
@@ -84,7 +79,6 @@ const CreateChat = (props: CreateChatProps) => {
             onClosed?.();
           }}
           onBlur={() => {
-            console.log("showSearch", showSearch);
             setTimeout(() => {
               setShowSearch(false);
               onClosed?.();
@@ -106,7 +100,7 @@ const CreateChat = (props: CreateChatProps) => {
                 <div
                   className={classNames("search-content-item", {
                     "search-content-item-active":
-                      selectedContact?.userId == contact.userId,
+                      selectedContact?.userId === contact.userId,
                   })}
                   key={contact.userId}
                   onClick={() => {

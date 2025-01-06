@@ -14,13 +14,11 @@ interface ImageCropProps extends ModalProps {
 
 const ImageCrop = (props: ImageCropProps) => {
   const { onUpload, onCancel, img = "", ...others } = props;
-  const [image, setImage] = useState(dogImg);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const onCropComplete = useCallback(
     (croppedArea: any, croppedAreaPixels: any) => {
-      console.log(croppedArea, croppedAreaPixels);
       setCroppedAreaPixels(croppedAreaPixels);
     },
     []
@@ -28,7 +26,6 @@ const ImageCrop = (props: ImageCropProps) => {
 
   const getImage = async () => {
     const imgUrl = await getCroppedImg(img, croppedAreaPixels, 0);
-    console.log("getImage", imgUrl);
     onUpload?.(imgUrl as string);
     others?.onOk?.(imgUrl as any);
   };
@@ -52,7 +49,7 @@ const ImageCrop = (props: ImageCropProps) => {
         />
         {/* <div className="crop-toolBox">
           <Button type="primary" onClick={getImage}>
-            上传
+            Upload
           </Button>
           <Button
             type="default"
@@ -60,7 +57,7 @@ const ImageCrop = (props: ImageCropProps) => {
               onCancel?.();
             }}
           >
-            取消
+            Cancel
           </Button>
         </div> */}
       </div>

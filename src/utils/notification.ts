@@ -1,19 +1,18 @@
 import { rootStore } from "agora-chat-uikit";
 const options = {
-  requireInteraction: false, // 是否自动消失
-  body: "new message", // 展示的具体内容
-  tag: "", // 唯一值供记录用
+  requireInteraction: false, // Does it disappear automatically
+  body: "new message", // Displayed content
+  tag: "", // Unique value for recording employment
   // body: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp01%2F1ZZQ20QJS6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1648367265&t=c26344538c227e42c92ac1b26d4f9c65',
-  // icon: '/favicon@2x.png',
-  icon: "/logo192.png",
+  icon: "/Favicon@2x.png",
   image: "",
-  data: "", // 附带的数据，可以在展示时获取，然后用做具体的情况使用
-  lang: "", // 语言
-  dir: "auto", // 文字方向
-  renotify: false, // 允许覆盖
-  silent: false, // 静音属性为true时不能和vibrate一起使用
+  data: "", // The accompanying data can be obtained during presentation and used for specific situations
+  lang: "", // language
+  dir: "auto", // direction
+  renotify: false, // overlays allowed
+  silent: false,
   // badge: '',
-  // vibrate: [200, 100, 200], // 设备震动频率
+  // vibrate: [200, 100, 200], // Equipment vibration frequency
   // sound: '',
   // actions: [
   //     {
@@ -50,37 +49,37 @@ export const checkBrowerNotifyStatus = (
 };
 export const notification = (iconTitle: string, params: any, store: any) => {
   const config = { ...options, ...params };
-  
-    const state = store.getState();
-    const appConfig = state.appConfig;
-    if (!appConfig.notification) return;
-    const { chatType, from, to, ext } = params;
-    let conversationId = "";
-    if (chatType == "singleChat") {
-      conversationId = from;
-    } else {
-      conversationId = to;
-    }
-    const conversationList = rootStore.conversationStore.conversationList;
-    const conversation = conversationList.find(
-      (item: any) => item.conversationId === conversationId
-    );
-    if (conversation?.chatType == "singleChat" && conversation?.silent) {
+
+  const state = store.getState();
+  const appConfig = state.appConfig;
+  if (!appConfig.notification) return;
+  const { chatType, from, to, ext } = params;
+  let conversationId = "";
+  if (chatType === "singleChat") {
+    conversationId = from;
+  } else {
+    conversationId = to;
+  }
+  const conversationList = rootStore.conversationStore.conversationList;
+  const conversation = conversationList.find(
+    (item: any) => item.conversationId === conversationId
+  );
+  if (conversation?.chatType === "singleChat" && conversation?.silent) {
+    return;
+  }
+  if (conversation?.chatType === "groupChat" && conversation?.silent) {
+    if (
+      !(
+        ext.em_at_list.includes(rootStore.client.user) ||
+        ext.em_at_list === "ALL"
+      )
+    ) {
       return;
     }
-    if (conversation?.chatType == "groupChat" && conversation?.silent) {
-      if (
-        !(
-          ext.em_at_list.includes(rootStore.client.user) ||
-          ext.em_at_list == "ALL"
-        )
-      ) {
-        return;
-      }
-    }
-    const bodyList = config.body.split("?");
-    config.body = bodyList[0];
-    if (Notification?.permission === "granted") {
+  }
+  const bodyList = config.body.split("?");
+  config.body = bodyList[0];
+  if (Notification?.permission === "granted") {
     var notification = new Notification(config.title || "New Message", config);
     const session = {};
     notification.onclick = (res: any) => {

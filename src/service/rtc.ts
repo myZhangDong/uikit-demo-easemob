@@ -33,7 +33,6 @@ export const getRtcChannelMembers = (params: {
     .get(url)
     .then(function (response) {
       let members = response.data.result;
-      console.log(members);
       return members;
     })
     .catch(function (error) {

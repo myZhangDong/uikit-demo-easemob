@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import i18next from "../../../i18n";
 import {
-  Icon,
-  Switch,
   RootContext,
   Blocklist as BlocklistUIKit,
 } from "agora-chat-uikit";
@@ -10,8 +8,6 @@ import UserInfo from "../../../components/userInfo/userInfo";
 import classNames from "classnames";
 
 const Blocklist = () => {
-  const prefixCls = "blocklist";
-
   const context = useContext(RootContext);
   const { theme } = context;
   const themeMode = theme?.mode;
@@ -22,7 +18,6 @@ const Blocklist = () => {
     nickname?: string;
     userId: string;
   }) => {
-    console.log(item);
     setSelectedUser(item.userId);
   };
   return (
@@ -46,7 +41,7 @@ const Blocklist = () => {
             style={{
               width: "360px",
               borderLeft: `1px solid ${
-                themeMode == "dark" ? "#464E53" : "#E3E6E8"
+                themeMode === "dark" ? "#464E53" : "#E3E6E8"
               }`,
             }}
           >

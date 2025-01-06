@@ -1,13 +1,8 @@
 import React, { useContext } from "react";
 import i18next from "../../../i18n";
-import { Icon, Switch, RootContext } from "agora-chat-uikit";
+import { RootContext } from "agora-chat-uikit";
 import classNames from "classnames";
-import {
-  DEMO_VERSION,
-  SDK_VERSION,
-  UIKIT_VERSION,
-  appKey,
-} from "../../../config";
+import { SDK_VERSION, UIKIT_VERSION } from "../../../config";
 const About = () => {
   const prefixCls = "user-info";
 

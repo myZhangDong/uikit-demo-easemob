@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { rootStore } from "../UIKit/uikitListener";
+import { rootStore } from "../eventHandler";
 import type { RootState } from "./store";
 import { appKey } from "../config";
 export const loginSlice = createSlice({
@@ -35,7 +35,6 @@ export const loginSlice = createSlice({
         user: action.payload.userId,
         agoraToken: action.payload.chatToken,
       });
-      //设置 userId
       state.userId = action.payload.userId;
       state.chatToken = action.payload.chatToken;
       state.agoraUid = action.payload.agoraUid;
@@ -50,7 +49,6 @@ export const loginSlice = createSlice({
         user: action.payload.userId,
         pwd: action.payload.password,
       });
-      //设置 userId
       state.userId = action.payload.userId;
       state.password = action.payload.password;
     },

@@ -10,9 +10,6 @@ import {
   Input,
   rootStore,
 } from "agora-chat-uikit";
-import { use } from "i18next";
-import { useAppSelector, useAppDispatch } from "../../../hooks";
-import { on } from "events";
 import { observer } from "mobx-react-lite";
 interface Tab {
   title: React.ReactNode;
@@ -42,10 +39,8 @@ const SettingTab = (props: SettingMenuProps) => {
 
   const context = useContext(RootContext);
   const { theme } = context;
-  console.log("theme >>>", context);
   const themeMode = theme?.mode;
-  const state = useAppSelector((state) => state.appConfig);
-  //找出type === 'menu'的tab, 如果有则保存对应的key, value保存选中的值,
+  // Find the tab where type === ‘menu’. If found, save the corresponding key and store the selected value.
   let menuTabsMap: Map<string, Tab & { open?: boolean; value?: string }> =
     new Map();
 
@@ -58,7 +53,6 @@ const SettingTab = (props: SettingMenuProps) => {
   });
 
   const [menuTab, setMenuTab] = useState(menuTabsMap);
-  console.log("menuTabKeys", menuTabsMap);
 
   const [presenceModalOpen, setPresenceModalOpen] = useState(false);
   const [customPresenceExt, setCustomPresenceExt] = useState("");
@@ -125,10 +119,9 @@ const SettingTab = (props: SettingMenuProps) => {
                         key={`${group.key}_${index}`}
                         className={classNames("setting-menu-item")}
                         onClick={() => {
-                          // 设置 open 属性
+                          // Set the open attribute
                           setMenuTab((prev) => {
                             let newMenuTab = new Map(prev);
-                            console.log("newMenuTab", newMenuTab);
                             newMenuTab.set(item.key, {
                               ...(prev.get(item.key) as Tab),
                               open: !prev.get(item.key)?.open,
@@ -258,7 +251,7 @@ const SettingTab = (props: SettingMenuProps) => {
       </div>
       <div className="setting-tab-content">
         {
-          // 根据key index 获取对应的content
+          // Get the corresponding content based on the key index
           tabGroups.map((group, index) => {
             if (group.key === getKeyIndex(activeKey).key) {
               return group.tabs[Number(getKeyIndex(activeKey).index)].content;

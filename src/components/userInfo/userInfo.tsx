@@ -20,7 +20,12 @@ interface UserInfoProps {
     chatType: "singleChat";
     conversationId: string;
   };
-  // 配置都显示哪些功能   1.备注  2.消息免打扰  3.加入黑名单  4.清空聊天记录  5.删除联系人
+  // Configure which features to display:
+  // 1.	Remarks
+  // 2.	Do Not Disturb for Messages
+  // 3.	Add to Blacklist
+  // 4.	Clear Chat History
+  // 5.	Delete Contact
   itemConfig?: {
     remark?: boolean;
     silent?: boolean;

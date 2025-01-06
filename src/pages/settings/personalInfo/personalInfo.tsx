@@ -35,7 +35,6 @@ const PersonalInfo = () => {
   };
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     if (e.target.value.length > 20) return;
 
     rootStore.client
@@ -62,29 +61,13 @@ const PersonalInfo = () => {
     setImg(url);
     setCropModalOpen(true);
     imageEl!.current!.value = "";
-    // const formData = new FormData();
-    // if (!file) return;
-
-    // formData.append("file", file);
-    // uploadImage(formData).then((url) => {
-    //   rootStore.addressStore.setAppUserInfo({
-    //     ...addressStore.appUsersInfo,
-    //     [rootStore.client.user]: {
-    //       ...addressStore.appUsersInfo[rootStore.client.user],
-    //       avatarurl: url,
-    //     },
-    //   });
-    // });
-    // imageEl!.current!.value = "";
   };
 
   const handleUploadImage = (url: string) => {
     fetch(url).then((res) => {
       res.blob().then((blob) => {
-        console.log("blob", blob);
         const formData = new FormData();
         formData.append("file", blob);
-        console.log("formData", formData);
         uploadImage(formData).then((url) => {
           rootStore.addressStore.setAppUserInfo({
             ...addressStore.appUsersInfo,
@@ -111,13 +94,13 @@ const PersonalInfo = () => {
   const handleCopy = () => {
     var textArea = document.createElement("textarea");
     textArea.value = rootStore.client.user;
-    // 添加到 DOM 元素中，方便调用 select 方法
+    // Add to the DOM element for easier invocation of the select method
     document.body.appendChild(textArea);
-    // 选中文本
+    // “Select Text”
     textArea.select();
-    // 执行复制命令
+    // “Execute Copy Command”
     document.execCommand("copy");
-    // 删除临时元素
+    // Remove Temporary Element
     document.body.removeChild(textArea);
     toast.success(i18next.t("copySuccess"));
   };
@@ -139,7 +122,8 @@ const PersonalInfo = () => {
               shape={theme?.avatarShape}
               presence={{ visible: true, icon: presence }}
             >
-              {addressStore.appUsersInfo[rootStore.client.user]?.nickname}
+              {addressStore.appUsersInfo[rootStore.client.user]?.nickname ||
+                rootStore.client.user}
             </Avatar>
             <div>
               <div className={`${prefixCls}-header-name`}>

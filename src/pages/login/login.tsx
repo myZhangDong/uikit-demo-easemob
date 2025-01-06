@@ -1,10 +1,5 @@
 import "./login.scss";
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import i18next from "../../i18n";
 import loading from "../../assets/loading.png";
 import closeIcon from "../../assets/Xmark@2x.png";
@@ -78,7 +73,6 @@ const Login = () => {
     getToken(values.userId.toLowerCase(), values.password)
       .then((res) => {
         const { chatUserName, accessToken, agoraUid } = res.data;
-        console.log("获取 token 成功", res);
         dispatch(
           loginWithToken({
             userId: chatUserName.toLowerCase(),

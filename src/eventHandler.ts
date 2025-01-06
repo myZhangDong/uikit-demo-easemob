@@ -1,15 +1,13 @@
 import { rootStore, eventHandler } from "agora-chat-uikit";
-import { useSelector, useDispatch } from "react-redux";
-import { setLoggedIn } from "../store/loginSlice";
-import { store } from "../store/store";
-import { notification } from "../utils/notification";
+import { setLoggedIn } from "./store/loginSlice";
+import { notification } from "./utils/notification";
 import toast from "react-hot-toast";
-import i18next from "../i18n";
+import i18next from "./i18n";
 const listener = (store: any) => {
   const { client } = rootStore;
   const dispatch = store.dispatch;
 
-  client.addEventHandler("chatdemo", {
+  client.addEventHandler("sdkEvent", {
     onConnected: () => {
       dispatch(setLoggedIn(true));
     },
@@ -47,14 +45,11 @@ const listener = (store: any) => {
     },
   });
 
-  eventHandler.addEventHandler("uikit", {
-    onError: (error) => {
-      console.error(error);
-    },
+  eventHandler.addEventHandler("uikitEvent", {
+    onError: (error) => {},
     addReaction: {
       error: (error) => {
-        console.log("addReaction error", error);
-        if (error.type == 50) {
+        if (error.type === 50) {
           toast.error(`Reaction ${i18next.t("Exceeded maximum number")}`);
         }
       },
@@ -65,12 +60,44 @@ const listener = (store: any) => {
       },
       error: (error) => {
         if (
-          error.type == 204 &&
-          error.message == "Service resource not found"
+          error.type === 204 &&
+          error.message === "Service resource not found"
         ) {
           toast.error(i18next.t("User does not exist"));
         } else {
           toast.error(i18next.t("Request failed"));
+        }
+      },
+    },
+    recallMessage: {
+      success: () => {
+        toast.success(i18next.t("Recall message successfully"));
+      },
+      error: (error) => {
+        toast.error(i18next.t("Recall message failed"));
+      },
+    },
+    reportMessage: {
+      success: () => {
+        toast.success(i18next.t("Reported successfully"));
+      },
+      error: (error) => {
+        toast.error(i18next.t("Report failed"));
+      },
+    },
+    sendMessage: {
+      error: (error) => {
+        if (error.type === 507) {
+          toast.error(i18next.t("You have been banned from sending messages"));
+        } else if (
+          error.type === 602 &&
+          error.message === "not in group or chatroom"
+        ) {
+          toast.error(
+            i18next.t(
+              "Message sending failed, you are no longer in the current group"
+            )
+          );
         }
       },
     },

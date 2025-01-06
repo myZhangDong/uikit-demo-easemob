@@ -26,7 +26,7 @@ interface NavigationBarProps {
     title: string;
     icon: ReactNode;
     content: React.ReactNode;
-    unmountOnExit?: boolean; // 切换后是否卸载
+    unmountOnExit?: boolean; // Whether to unmount after switching
   }[];
 }
 
@@ -55,7 +55,6 @@ const NavigationBar = forwardRef(({ tabs }: NavigationBarProps, ref) => {
   if (myInfo.isOnline === undefined) {
     myInfo.isOnline = true;
   }
-
   const presence = myInfo.isOnline
     ? presenceMap?.[myInfo.presenceExt || "Online"] || presenceMap?.["Custom"]
     : presenceMap?.["Offline"];
